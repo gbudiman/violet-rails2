@@ -51,7 +51,7 @@ RSpec.describe Agent, type: :model do
     end
 
     context "secondary stats" do
-      it 'should be derived correctly' do
+      it "should be derived correctly" do
         @agent.derive_secondary_stats!
       end
     end
