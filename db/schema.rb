@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2018_12_29_080728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agents", force: :cascade do |t|
+    t.string "uuid", null: false
+    t.jsonb "initial_state", null: false
+    t.jsonb "current_state", null: false
+    t.bigint "battlefield_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["battlefield_id", "uuid"], name: "index_agents_on_battlefield_id_and_uuid", unique: true
+    t.index ["battlefield_id"], name: "index_agents_on_battlefield_id"
+  end
+
+  create_table "battlefields", force: :cascade do |t|
+    t.bigint "seed", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
