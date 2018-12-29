@@ -41,6 +41,6 @@ private
   end
 
   def apply_recursive_open_struct
-    @workable_state ||= RecursiveOpenStruct.new(self.current_state)
+    @workable_state = RecursiveOpenStruct.new(self.current_state)
   end
 end
