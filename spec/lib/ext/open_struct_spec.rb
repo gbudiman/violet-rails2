@@ -11,7 +11,6 @@ RSpec.describe OpenStruct, type: :monkey_patch do
     )
   end
 
-
   it { expect(subject.has_all?(:a, :b)).to eq true }
   it { expect(subject.has_all?(:a, :b, :c)).to eq false }
   it { expect(subject.has_all?(:a, :b, :c, :d)).to eq false }

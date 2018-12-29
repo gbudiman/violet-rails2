@@ -51,8 +51,12 @@ RSpec.describe Agent, type: :model do
     end
 
     context "secondary stats" do
-      it "should be derived correctly" do
+      before do
         @agent.derive_secondary_stats!
+      end
+
+      it "should be derived correctly" do
+        expect(@agent.resources.limit.max).to eq 24  
       end
     end
   end
