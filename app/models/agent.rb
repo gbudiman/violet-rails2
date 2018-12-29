@@ -1,18 +1,32 @@
 # frozen_string_literal: true
 
 class Agent < ApplicationRecord
+  include Violet::Skills::Limit
+
   belongs_to :battlefield
   after_initialize :copy_initial_state, :generate_uuid
   after_find :apply_recursive_open_struct
-
-  delegate :stat, to: :workable_state
-  delegate :skills, to: :workable_state
+  after_commit :apply_recursive_open_struct, on: [:create, :update]
+  
   delegate :effects, to: :workable_state
   delegate :equipments, to: :workable_state
   delegate :inventories, to: :workable_state
-
+  delegate :resources, to: :workable_state
+  delegate :skills, to: :workable_state
+  delegate :stats, to: :workable_state
+  
   def self.register!(battlefield_id:, state:)
     Agent.create!(battlefield_id: battlefield_id, initial_state: state)
+  end
+
+  def derive_secondary_stats!
+    self.class.included_modules.each do |mod|
+      if mod.to_s.split('::').first == 'Violet'
+        compute_derived_stat
+      else
+        break
+      end
+    end
   end
 
 private
@@ -27,6 +41,16 @@ private
   end
 
   def apply_recursive_open_struct
-    @workable_state = RecursiveOpenStruct.new(self.current_state)
+    @workable_state ||= RecursiveOpenStruct.new(self.current_state)
+  end
+end
+
+class OpenStruct
+  def has_all?(*args)
+    args.map { |x| self[x] }.reduce(true) { |a, b| a && b }
+  end
+
+  def has_one?(*args)
+    args.map { |x| self[x] }.reduce(false) { |a, b| a || b }
   end
 end

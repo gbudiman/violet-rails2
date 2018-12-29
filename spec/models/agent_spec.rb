@@ -5,15 +5,25 @@ require "rails_helper"
 RSpec.describe Agent, type: :model do
   let(:state) do
     {
-      stat: {
+      stats: {
         str: 30,
         agi: 50,
         dex: 26,
         int:  1,
         vit: 77,
-        fai: 16
+        fai: 16,
+        hp: 1000,
+        limit: 32,
       },
-      skills: {},
+      resources: {
+        hp: { current: 500 },
+        limit: { current: 8 },
+      },
+      skills: {
+        limit_break_mechanics: true,
+        limit_break_redux: true,
+        limit_break_steel_lung: true,
+      },
       effects: {},
       equipments: {},
       inventories: {},
@@ -37,7 +47,13 @@ RSpec.describe Agent, type: :model do
 
     it "should automatically convert current_state to OpenStruct" do
       agent = Agent.find(@agent.id)
-      expect(agent.stat.str).to be_a_kind_of(Integer)
+      expect(agent.stats.str).to be_a_kind_of(Integer)
+    end
+
+    context "secondary stats" do
+      it 'should be derived correctly' do
+        @agent.derive_secondary_stats!
+      end
     end
   end
 end
