@@ -20,9 +20,13 @@ class Agent < ApplicationRecord
   end
 
   def derive_secondary_stats!
-    Violet::SKILLS.each do |skill|
-      "Violet::Skills::#{skill}".constantize.new(@workable_state)
+    Violet::MODULES.each do |mod|
+      "Violet::#{mod.to_s.upcase}".constantize.each do |submod|
+        "Violet::#{mod.to_s.camelize}::#{submod.to_s.camelize}".constantize.new(@workable_state)
+      end
     end
+
+    ap workable_state
   end
 
 private

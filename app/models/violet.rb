@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
 module Violet
-  SKILLS = ["Limit", "Shield"]
+  MODULES = [:skills, :stats]
+
+  SKILLS = [:limit, :shield]
+  STATS = [:weight]
 end

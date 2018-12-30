@@ -1,15 +1,13 @@
-# frozen_string_literal: true
-
 module Violet
-  module Skills
-    class Shield
+  module Stats
+    class Weight
       attr_accessor :state
       delegate_missing_to :state
 
       def initialize(state)
         @state = state
-        #ap "called from shield"
-        #ap @state
+        resources.weight ||= {}
+        resources.weight.max = 8 * Math.log2(2 + stats.str)
       end
     end
   end

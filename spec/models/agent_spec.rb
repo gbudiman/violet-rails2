@@ -6,7 +6,7 @@ RSpec.describe Agent, type: :model do
   let(:state) do
     {
       stats: {
-        str: 30,
+        str: 32,
         agi: 50,
         dex: 26,
         int:  1,
@@ -57,6 +57,7 @@ RSpec.describe Agent, type: :model do
 
       it "should be derived correctly" do
         expect(@agent.resources.limit.max).to eq 24
+        expect(@agent.resources.weight.max).to be_a_kind_of(Float)
       end
     end
   end
