@@ -3,11 +3,10 @@
 module Violet
   module Stats
     class Weight
-      attr_accessor :state
-      delegate_missing_to :state
+      include Concerns::Stateable
 
       def initialize(state)
-        @state = state
+        super
         resources.weight ||= {}
         resources.weight.max = 8 * Math.log2(2 + stats.str)
       end
