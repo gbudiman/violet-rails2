@@ -71,6 +71,7 @@ RSpec.describe Agent, type: :model do
 
       context "secondary stats" do
         it "should be derived correctly" do
+          ap @agent.resources.limit
           expect(@agent.resources.limit.max).to eq 24
           expect(@agent.resources.weight.max).to be_a_kind_of(Float)
         end
