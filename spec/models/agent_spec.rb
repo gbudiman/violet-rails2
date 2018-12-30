@@ -23,6 +23,7 @@ RSpec.describe Agent, type: :model do
         limit_break_mechanics: true,
         limit_break_redux: true,
         limit_break_steel_lung: true,
+        shield_slinger: true,
       },
       effects: {},
       anatomy: {
@@ -36,8 +37,8 @@ RSpec.describe Agent, type: :model do
         hip: :ok,
       },
       equipments: {
-        hand_main: { props: [:sword] },
-        hand_off: { props: [:shield] },
+        hand_main: { props: [:sword], weight: 20 },
+        hand_off: { props: [:shield], weight: 18 },
       },
       inventories: {},
     }
@@ -80,6 +81,16 @@ RSpec.describe Agent, type: :model do
           [:hand_main, :hand_off].each do |limb|
             expect(@agent.equipments[limb].status).to eq(:equipped)
           end
+        end
+      end
+
+      context "effect checks" do
+        it "should add effect from skills correctly" do
+          equipped = state[:equipments]
+          expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
+          expect(@agent.resources.weight.current).to eq(
+            equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
+          )
         end
       end
     end

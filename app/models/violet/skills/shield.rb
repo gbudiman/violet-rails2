@@ -6,7 +6,21 @@ module Violet
       include Concerns::Stateable
 
       def initialize(state)
-        @state = state
+        super
+
+        if skills.has?(:shield_slinger)
+          effects.shield_slinger = {
+            stack: :permanent,
+            callback: -> (agent) {
+              agent.anatomies_holding(:shield).each do |anatomy|
+                agent.equipments[anatomy].callbacks_for_weight ||= []
+                agent.equipments[anatomy].callbacks_for_weight.push(lambda {
+                  agent.equipments[anatomy].weight / 2
+                })
+              end
+            }
+          }
+        end
       end
     end
   end

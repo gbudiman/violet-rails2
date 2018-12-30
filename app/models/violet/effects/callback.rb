@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
 module Violet
-  module Stats
-    class Weight
+  module Effects
+    class Callback
       include Concerns::Stateable
       include Violet::Equipments
 
       def initialize(state)
         super
-        resources.weight ||= {}
-        resources.weight.max = 8 * Math.log2(2 + stats.str)
-
-        compute_current_weight!
+        effects.each do |effect, values|
+          values[:callback].call(self) if values[:callback].present?
+        end
       end
     end
   end
