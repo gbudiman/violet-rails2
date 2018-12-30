@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Violet
-  SKILLS = ['Limit', 'Shield']
+  SKILLS = ["Limit", "Shield"]
 end

@@ -56,7 +56,7 @@ RSpec.describe Agent, type: :model do
       end
 
       it "should be derived correctly" do
-        expect(@agent.resources.limit.max).to eq 24  
+        expect(@agent.resources.limit.max).to eq 24
       end
     end
   end
