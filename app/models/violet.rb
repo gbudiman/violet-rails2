@@ -6,4 +6,16 @@ module Violet
   ANATOMIES = [:arm, :feet, :hand, :head, :hip, :torso]
   SKILLS = [:limit, :shield]
   STATS = [:weight]
+
+  extend ActiveSupport::Concern
+
+  included do
+    def submodules_of(modules)
+      "Violet::#{modules.to_s.upcase}".constantize
+    end
+
+    def class_of(mod, submod)
+      "Violet::#{mod.to_s.camelize}::#{submod.to_s.camelize}".constantize
+    end
+  end
 end

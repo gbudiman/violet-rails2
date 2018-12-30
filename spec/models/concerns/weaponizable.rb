@@ -7,8 +7,8 @@ RSpec.describe Concerns::Weaponizable, type: :concern do
     include Concerns::Weaponizable
   end
 
-  let(:state) do 
-    RecursiveOpenStruct.new({
+  let(:state) do
+    RecursiveOpenStruct.new(
       anatomy: {
         hand_main: :ok,
         hand_off: :ok,
@@ -23,7 +23,7 @@ RSpec.describe Concerns::Weaponizable, type: :concern do
         hand_main: { props: [:sword] },
         hand_off: { props: [:shield] },
       },
-    })
+    )
   end
 
   subject(:dummy) { Dummy.new(state) }
