@@ -86,8 +86,11 @@ RSpec.describe Agent, type: :model do
 
       context "effect checks" do
         it "should add effect from skills correctly" do
+          equipped = state[:equipments] 
           expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
-          expect(@agent.resources.weight.current).to eq(29)
+          expect(@agent.resources.weight.current).to eq(
+            equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
+          )
         end
       end
     end
