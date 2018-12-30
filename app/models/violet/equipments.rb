@@ -23,7 +23,7 @@ module Violet
 
       def anatomies_holding(target)
         equipments.select do |anatomy, eq|
-          eq[:props].include?(target.to_s)
+          eq[:props].map(&:to_sym).include?(target)
         end.to_h.keys
       end
     end
