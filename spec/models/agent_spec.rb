@@ -6,7 +6,7 @@ RSpec.describe Agent, type: :model do
   let(:state) do
     {
       stats: {
-        str: 30,
+        str: 32,
         agi: 50,
         dex: 26,
         int:  1,
@@ -25,7 +25,20 @@ RSpec.describe Agent, type: :model do
         limit_break_steel_lung: true,
       },
       effects: {},
-      equipments: {},
+      anatomy: {
+        hand_main: :ok,
+        hand_off: :ok,
+        arm_main: :ok,
+        arm_off: :ok,
+        feet: :ok,
+        head: :ok,
+        torso: :ok,
+        hip: :ok,
+      },
+      equipments: {
+        hand_main: { props: [:sword] },
+        hand_off: { props: [:shield] },
+      },
       inventories: {},
     }
   end
@@ -50,13 +63,24 @@ RSpec.describe Agent, type: :model do
       expect(agent.stats.str).to be_a_kind_of(Integer)
     end
 
-    context "secondary stats" do
+    context "preprocessing" do
       before do
         @agent.derive_secondary_stats!
       end
 
-      it "should be derived correctly" do
-        expect(@agent.resources.limit.max).to eq 24  
+      context "secondary stats" do
+        it "should be derived correctly" do
+          expect(@agent.resources.limit.max).to eq 24
+          expect(@agent.resources.weight.max).to be_a_kind_of(Float)
+        end
+      end
+
+      context "equipment checks" do
+        it "should indicate equipped status correctly" do
+          [:hand_main, :hand_off].each do |limb|
+            expect(@agent.equipments[limb].status).to eq(:equipped)
+          end
+        end
       end
     end
   end

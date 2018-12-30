@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class Agent < ApplicationRecord
-  include Violet::Skills::Limit
-
   belongs_to :battlefield
   after_initialize :copy_initial_state, :generate_uuid
   after_find :apply_recursive_open_struct
   after_commit :apply_recursive_open_struct, on: [:create, :update]
 
+  delegate :anatomies, to: :workable_state
   delegate :effects, to: :workable_state
   delegate :equipments, to: :workable_state
   delegate :inventories, to: :workable_state
@@ -20,13 +19,13 @@ class Agent < ApplicationRecord
   end
 
   def derive_secondary_stats!
-    self.class.included_modules.each do |mod|
-      if mod.to_s.split("::").first == "Violet"
-        compute_derived_stat
-      else
-        break
+    Violet::MODULES.each do |mod|
+      "Violet::#{mod.to_s.upcase}".constantize.each do |submod|
+        "Violet::#{mod.to_s.camelize}::#{submod.to_s.camelize}".constantize.new(@workable_state)
       end
     end
+
+    # ap workable_state
   end
 
 private
