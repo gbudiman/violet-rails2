@@ -7,7 +7,7 @@ module Concerns
 
     included do
       def equip_equipments
-        equipments.to_h.each do |intended_anatomy, equipment|
+        equipments.each do |intended_anatomy, equipment|
           case anatomy[intended_anatomy].to_sym
           when :ok
             equipments[intended_anatomy].status = :equipped

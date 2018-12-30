@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OpenStruct
+  include Enumerable
+  
   def has?(arg)
     self[arg] || false
   end
@@ -11,5 +13,9 @@ class OpenStruct
 
   def has_one?(*args)
     args.map { |x| self[x] }.reduce(false) { |a, b| a || b }
+  end
+
+  def each(&block)
+    self.to_h.each(&block)
   end
 end

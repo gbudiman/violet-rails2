@@ -6,7 +6,16 @@ module Violet
       include Concerns::Stateable
 
       def initialize(state)
-        @state = state
+        super
+
+        if skills.has?(:shield_slinger)
+          effects.shield_slinger = { 
+            stack: :permanent, 
+            effect: Proc.new { 
+              
+            }
+          }
+        end
       end
     end
   end
