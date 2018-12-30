@@ -6,15 +6,19 @@ module Violet
 
     included do
       def compute_current_weight!
+        current_weight = 0
+
         equipments.each do |anatomy, equipment|
           if equipment[:callbacks_for_weight].is_a?(Array)
             equipment[:callbacks_for_weight].each do |callback|
-              resources.weight.current += callback.call
+              current_weight += callback.call
             end
           else
-            resources.weight.current += equipment[:weight]
+            current_weight += equipment[:weight]
           end
         end
+
+        resources.weight.current = current_weight
       end
 
       def anatomies_holding(target)
