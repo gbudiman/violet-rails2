@@ -18,8 +18,8 @@ module Violet
       end
 
       def anatomies_holding(target)
-        equipments.select do |anatomy, eq| 
-          eq[:props].include?(target.to_s) 
+        equipments.select do |anatomy, eq|
+          eq[:props].include?(target.to_s)
         end.to_h.keys
       end
     end

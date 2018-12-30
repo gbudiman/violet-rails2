@@ -24,8 +24,8 @@ RSpec.describe Violet::Equipments, type: :module do
 
   subject(:dummy) { Dummy.new(state) }
 
-  context '#anatomies_holding' do
-    it 'should return matching anatomies' do
+  context "#anatomies_holding" do
+    it "should return matching anatomies" do
       expect(dummy.anatomies_holding(:shield)).to contain_exactly(:hand_off)
       expect(dummy.anatomies_holding(:disarmable)).to contain_exactly(:hand_main, :hand_off)
     end
