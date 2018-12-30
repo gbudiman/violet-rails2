@@ -8,8 +8,8 @@ module Violet
 
       def initialize(state)
         @state = state
-        #ap "called from shield"
-        #ap @state
+        # ap "called from shield"
+        # ap @state
       end
     end
   end

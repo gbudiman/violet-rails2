@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Violet
   module Anatomies
     class Hip
-      attr_accessor :state
-      delegate_missing_to :state
-      
+      include Concerns::Stateable
+
       def initialize(state)
+        super
       end
     end
   end

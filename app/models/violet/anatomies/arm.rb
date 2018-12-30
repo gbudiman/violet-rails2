@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Violet
   module Anatomies
     class Arm

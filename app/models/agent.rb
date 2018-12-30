@@ -25,7 +25,7 @@ class Agent < ApplicationRecord
       end
     end
 
-    #ap workable_state
+    # ap workable_state
   end
 
 private

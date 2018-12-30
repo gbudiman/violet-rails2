@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Concerns
   module Weaponizable
     extend ActiveSupport::Concern
+    include Concerns::Stateable
 
     included do
       def equip_equipments
@@ -15,6 +18,11 @@ module Concerns
           end
         end
       end
+    end
+
+    def initialize(state)
+      super
+      equip_equipments
     end
   end
 end

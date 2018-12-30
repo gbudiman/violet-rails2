@@ -25,9 +25,9 @@ RSpec.describe Agent, type: :model do
         limit_break_steel_lung: true,
       },
       effects: {},
-      anatomy: { 
-        hand_main: :ok, 
-        hand_off: :ok, 
+      anatomy: {
+        hand_main: :ok,
+        hand_off: :ok,
         arm_main: :ok,
         arm_off: :ok,
         feet: :ok,
