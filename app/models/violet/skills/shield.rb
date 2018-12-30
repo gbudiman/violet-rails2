@@ -2,15 +2,14 @@
 
 module Violet
   module Skills
-    class Limit
+    class Shield
       attr_accessor :state
       delegate_missing_to :state
 
       def initialize(state)
         @state = state
-        if skills.has_all?(:limit_break_mechanics, :limit_break_redux)
-          resources.limit.max = stats.limit * 3 / 4
-        end
+        ap 'called from shield'
+        ap @state
       end
     end
   end

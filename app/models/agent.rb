@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Agent < ApplicationRecord
-  include Violet::Skills::Limit
+  include Violet::Skills
 
   belongs_to :battlefield
   after_initialize :copy_initial_state, :generate_uuid
@@ -20,12 +20,8 @@ class Agent < ApplicationRecord
   end
 
   def derive_secondary_stats!
-    self.class.included_modules.each do |mod|
-      if mod.to_s.split("::").first == "Violet"
-        compute_derived_stat
-      else
-        break
-      end
+    Violet::SKILLS.each do |skill|
+      "Violet::Skills::#{skill}".constantize.new(@workable_state)
     end
   end
 
