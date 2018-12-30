@@ -4,7 +4,9 @@ module Violet
   MODULES = [:anatomies, :skills, :stats]
 
   ANATOMIES = [:arm, :feet, :hand, :head, :hip, :torso]
-  SKILLS = [:limit, :shield]
+  SKILLS = [
+    :stance, :limit, :shield
+  ]
   STATS = [:weight]
 
   extend ActiveSupport::Concern

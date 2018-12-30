@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class OpenStruct
+  def has?(arg)
+    self[arg] || false
+  end
+
   def has_all?(*args)
     args.map { |x| self[x] }.reduce(true) { |a, b| a && b }
   end
