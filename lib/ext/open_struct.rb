@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class OpenStruct
-  #include Enumerable
-
   def has?(arg)
     self[arg] || false
   end
@@ -20,6 +18,6 @@ class OpenStruct
   end
 
   def select(&block)
-    self.to_h.each(&block)
+    self.to_h.select(&block)
   end
 end

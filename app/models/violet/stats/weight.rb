@@ -9,6 +9,7 @@ module Violet
       def initialize(state)
         super
         resources.weight ||= {}
+        resources.weight.current = 0
         resources.weight.max = 8 * Math.log2(2 + stats.str)
 
         compute_current_weight!
