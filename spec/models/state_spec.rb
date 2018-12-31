@@ -48,6 +48,8 @@ RSpec.describe State, type: :model do
     [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb, 
      :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
       expect(stats.send(key)).to eq(state[:stats][key] || 0)
+      expect(stats.send("#{key}_base")).to eq(state[:stats][key] || 0)
+      expect(stats.send("#{key}_aux")).to eq(0)
     end
   end
 end
