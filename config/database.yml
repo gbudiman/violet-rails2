@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+
+development:
+  <<: *default
+  database: violet_dev
+  username: <%= ENV['VIOLET_DEV_DATABASE_USERNAME'] %>
+  password: <%= ENV['VIOLET_DEV_DATABASE_PASSWORD'] %>
+
+test:
+  <<: *default
+  database: violet_test
+  username: <%= ENV['VIOLET_TEST_DATABASE_USERNAME'] %>
+  password: <%= ENV['VIOLET_TEST_DATABASE_PASSWORD'] %>
+
+production:
+  <<: *default
+  database: violet_prod
