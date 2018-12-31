@@ -9,7 +9,11 @@ module Concerns
     end
 
     def aux
-      self.reject{ |k, v| k == :base }.values.reduce(0, :+)
+      auxes.values.reduce(0, :+)
+    end
+
+    def auxes
+      self.reject{ |k, v| k == :base }
     end
 
     def method_missing(m, *args, &block)

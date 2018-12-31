@@ -57,5 +57,8 @@ RSpec.describe State, type: :model do
     expect(stats.str!).to eq(stats.str.visceral_strength + state[:stats][:str])
     expect(stats.str.base).to eq(state[:stats][:str])
     expect(stats.str.aux).to eq(stats.str.visceral_strength)
+    expect(stats.str.auxes).to eq({
+      visceral_strength: stats.str.visceral_strength
+    })
   end
 end
