@@ -3,7 +3,7 @@
 module Concerns
   module Auxable
     def to_i
-      self.map { |k, v| v }.reduce(0, :+)
+      self.values.reduce(0, :+)
     end
 
     def base

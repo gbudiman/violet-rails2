@@ -15,8 +15,8 @@ RSpec.describe State, type: :model do
         limit: 32,
       },
       resources: {
-        hp: { current: 500 },
-        limit: { current: 8 },
+        hp: 500,
+        limit: 8,
       },
       skills: {
         limit_break_mechanics: true,
@@ -45,6 +45,7 @@ RSpec.describe State, type: :model do
 
   subject { State.new(state) }
   let(:stats) { subject.stats }
+  let(:resources) { subject.resources }
   it { expect(subject.stats).to be_a_kind_of(State::Stat) }
   it "expects stats to be initialized correctly" do
     [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb,
@@ -62,5 +63,11 @@ RSpec.describe State, type: :model do
     expect(stats.str.auxes).to eq(
       visceral_strength: stats.str.visceral_strength
     )
+  end
+  it "expects resources to be initialized correctly" do
+    [:hp, :weight, :limit, :trance, :orb,
+     :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
+      expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
+    end
   end
 end

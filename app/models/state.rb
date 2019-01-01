@@ -11,5 +11,6 @@ class State
 
   def initialize(h)
     @stats = Stat.new(h[:stats])
+    @resources = Resource.new(h[:resources])
   end
 end

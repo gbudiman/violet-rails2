@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
-class State::Stat
-  VALID_ATTRIBUTES = Concerns::Attributable::VALID_STATS
-  BASE_ACCESSOR = :base
+class State::Resource
+  VALID_ATTRIBUTES = Concerns::Attributable::VALID_RESOURCES
+  BASE_ACCESSOR = :current
 
   include Concerns::Attributable
   def initialize(**kwargs)
