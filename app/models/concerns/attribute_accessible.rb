@@ -1,12 +1,11 @@
 module Concerns
-  module AttributeSummable
+  module AttributeAccessible
     extend ActiveSupport::Concern
-    
+
     def self.extended(base)
-      base.extend(Concerns::AttributeAccessible)
       base.class::VALID_ATTRIBUTES.each do |key|
-        define_method("#{key}!") do
-          instance_variable_get("@#{key}").to_i
+        define_method(key) do
+          instance_variable_get("@#{key}")
         end
       end
     end
