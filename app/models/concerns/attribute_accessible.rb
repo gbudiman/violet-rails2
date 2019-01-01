@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns
   module AttributeAccessible
     extend ActiveSupport::Concern

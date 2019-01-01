@@ -3,8 +3,8 @@
 module Concerns
   module Effectable
     def method_missing(m, *args, &block)
-      if m.to_s.last == '='
-        self[m[0..-2].to_sym] = args.first
+      if m.to_s.last == "="
+        self[m[0..-2].to_sym] = args.first.extend(Concerns::EffectQueryable)
       else
         self[m]
       end

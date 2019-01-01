@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns
   module Attributable
     VALID_MECHANICS = [:limit, :trance, :orb, :impulse, :malice, :mana, :soul, :gestalt, :prayer]
@@ -5,7 +7,7 @@ module Concerns
     VALID_RESOURCES = VALID_MECHANICS + [:hp, :weight]
     extend ActiveSupport::Concern
 
-    def initialize(valid_attributes, base_accessor=:base, **kwargs)
+    def initialize(valid_attributes, base_accessor = :base, **kwargs)
       valid_attributes.each do |key|
         instance_variable_set("@#{key}", {
           (base_accessor || :base) => kwargs[key] || 0

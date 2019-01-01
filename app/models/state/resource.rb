@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class State::Resource
   VALID_ATTRIBUTES = Concerns::Attributable::VALID_RESOURCES
   BASE_ACCESSOR = :current
