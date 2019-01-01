@@ -81,6 +81,8 @@ RSpec.describe State, type: :model do
     it 'should be correctly accessible' do
       effects.shield_slinger = { stack: :permanent }
       ap effects
+      ap effects.shield_slinger
+      ap effects.shield_slinger.active?
     end
   end
 end

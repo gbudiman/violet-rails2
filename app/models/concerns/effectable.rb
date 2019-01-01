@@ -6,6 +6,7 @@ module Concerns
       if m.to_s.last == '='
         self[m[0..-2].to_sym] = args.first
       else
+        self[m]
       end
     end
   end
