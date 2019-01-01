@@ -68,6 +68,11 @@ RSpec.describe State, type: :model do
     [:hp, :weight, :limit, :trance, :orb,
      :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
       expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
+      expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
+
+      random_number = 2000
+      resources.send(key).capacity = random_number
+      expect(resources.send(key).send(:capacity)).to eq(random_number)
     end
   end
 end
