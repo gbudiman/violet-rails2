@@ -46,6 +46,7 @@ RSpec.describe State, type: :model do
   subject { State.new(state) }
   let(:stats) { subject.stats }
   let(:resources) { subject.resources }
+  let(:effects) { subject.effects }
   it { expect(subject.stats).to be_a_kind_of(State::Stat) }
   it "expects stats to be initialized correctly" do
     [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb,
@@ -73,6 +74,13 @@ RSpec.describe State, type: :model do
       random_number = 2000
       resources.send(key).capacity = random_number
       expect(resources.send(key).send(:capacity)).to eq(random_number)
+    end
+  end
+
+  context "effects" do
+    it 'should be correctly accessible' do
+      effects.shield_slinger = { stack: :permanent }
+      ap effects
     end
   end
 end
