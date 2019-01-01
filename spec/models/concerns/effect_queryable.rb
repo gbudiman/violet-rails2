@@ -10,6 +10,21 @@ RSpec.describe Concerns::EffectQueryable, type: :concern do
     expect(subject.dummy_effect.active?).to eq true
   end
 
+  context "invalid initialization" do
+    it "should reject initialization given both stack and duration" do
+      expect do 
+        subject.dummy_effect = { stack: :permanent, duration: 30 }
+      end.to raise_error(ArgumentError, /^Only either/)
+    end
+
+    it "should reject initialization without either stack or duration" do
+      expect do
+        subject.dummy_effect = { }
+      end.to raise_error(ArgumentError, /^Either/)
+    end
+  end
+
+
   context "#active?" do
     context "should be true when" do
       after { expect(subject.efx.active?).to eq(true) }
