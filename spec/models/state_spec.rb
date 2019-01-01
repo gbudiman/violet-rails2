@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe State, type: :model do
   let(:state) do
@@ -40,25 +42,25 @@ RSpec.describe State, type: :model do
       inventories: {},
     }
   end
-  
+
   subject { State.new(state) }
   let(:stats) { subject.stats }
   it { expect(subject.stats).to be_a_kind_of(State::Stat) }
-  it 'expects stats to be initialized correctly' do
-    [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb, 
+  it "expects stats to be initialized correctly" do
+    [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb,
      :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
       expect(stats.send("#{key}!")).to eq(state[:stats][key] || 0)
       expect(stats.send(key).send(:base)).to eq(state[:stats][key] || 0)
       expect(stats.send(key).send(:aux)).to eq(0)
     end
   end
-  it 'expects stats auxiliary to be get/set correctly' do
+  it "expects stats auxiliary to be get/set correctly" do
     stats.str.visceral_strength = 32
     expect(stats.str!).to eq(stats.str.visceral_strength + state[:stats][:str])
     expect(stats.str.base).to eq(state[:stats][:str])
     expect(stats.str.aux).to eq(stats.str.visceral_strength)
-    expect(stats.str.auxes).to eq({
+    expect(stats.str.auxes).to eq(
       visceral_strength: stats.str.visceral_strength
-    })
+    )
   end
 end

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Concerns
   module Auxable
     def to_i
-      self.map{ |k, v| v }.reduce(0, :+)
+      self.map { |k, v| v }.reduce(0, :+)
     end
 
     def base
@@ -13,11 +15,11 @@ module Concerns
     end
 
     def auxes
-      self.reject{ |k, v| k == :base }
+      self.reject { |k, v| k == :base }
     end
 
     def method_missing(m, *args, &block)
-      if m.to_s.last == '='
+      if m.to_s.last == "="
         self[m[0..-2].to_sym] = args.first
       else
         self[m]
