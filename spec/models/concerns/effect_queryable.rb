@@ -12,14 +12,14 @@ RSpec.describe Concerns::EffectQueryable, type: :concern do
 
   context "invalid initialization" do
     it "should reject initialization given both stack and duration" do
-      expect do 
+      expect do
         subject.dummy_effect = { stack: :permanent, duration: 30 }
       end.to raise_error(ArgumentError, /^Only either/)
     end
 
     it "should reject initialization without either stack or duration" do
       expect do
-        subject.dummy_effect = { }
+        subject.dummy_effect = {}
       end.to raise_error(ArgumentError, /^Either/)
     end
   end
@@ -78,7 +78,7 @@ RSpec.describe Concerns::EffectQueryable, type: :concern do
     end
   end
 
-  context "#tick" do
+  context "#tick!" do
     context "on permanent effect" do
       it "should stay permanent" do
         subject.efx = { stack: :permanent }
@@ -92,7 +92,7 @@ RSpec.describe Concerns::EffectQueryable, type: :concern do
         expect(subject.efx.tick!).to eq(stack: 11)
       end
 
-      it 'should not reduce the stack below 0' do
+      it "should not reduce the stack below 0" do
         subject.efx = { stack: 0 }
         expect(subject.efx.tick!).to eq(stack: 0)
       end
@@ -105,8 +105,34 @@ RSpec.describe Concerns::EffectQueryable, type: :concern do
       end
 
       it "should not reduce the duration below 0" do
-        subject.efx = { duration: 0.1}
+        subject.efx = { duration: 0.1 }
         expect(subject.efx.tick!.duration).to eq(0)
+      end
+    end
+  end
+
+  context "#suppress!" do
+    context "on permanent effect" do
+      it "should be suppressed and revertible" do
+        subject.efx = { stack: :permanent }
+        expect(subject.efx.suppress!).to eq(stack: :suppressed)
+        expect(subject.efx.suppress!(false)).to eq(stack: :permanent)
+      end
+    end
+
+    context "on stacked effect" do
+      it "should reduce stack to zero and remain zero when unsuppressed" do
+        subject.efx = { stack: 12 }
+        expect(subject.efx.suppress!).to eq(stack: 0)
+        expect(subject.efx.suppress!(false)).to eq(stack: 0)
+      end
+    end
+
+    context "on durational effect" do
+      it "should reduce duration to zero and remain zero when unsuppressed" do
+        subject.efx = { duration: 12.3 }
+        expect(subject.efx.suppress!).to eq(duration: 0)
+        expect(subject.efx.suppress!(false)).to eq(duration: 0)
       end
     end
   end

@@ -2,16 +2,24 @@
 
 module Concerns
   module Effectable
+    def actives
+      self.select { |k, v| v.active? }
+    end
+
+    def inactives
+      self.select { |k, v| !v.active? }
+    end
+
     def method_missing(m, *args, &block)
-      if m.to_s.last == '='
+      if m.to_s.last == "="
         h = args.first
 
-        if h[:stack].present? and h[:duration].present?
+        if h[:stack].present? && h[:duration].present?
           raise ArgumentError, "Only either :stack or :duration qualifier may be present, not both"
-        elsif h[:stack].blank? and h[:duration].blank?
+        elsif h[:stack].blank? && h[:duration].blank?
           raise ArgumentError, "Either :stack or :duration must be specified"
         end
-        
+
         self[m[0..-2].to_sym] = h.extend(Concerns::EffectQueryable)
       else
         self[m]

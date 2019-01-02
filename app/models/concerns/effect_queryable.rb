@@ -23,6 +23,24 @@ module Concerns
       self
     end
 
+    def suppress!(val = true)
+      if val
+        if self[:stack].present?
+          self[:stack] = if self[:stack].is_a?(Integer)
+            0
+          elsif self[:stack].is_a?(Symbol)
+            :suppressed
+          end
+        elsif self[:duration].present?
+          self[:duration] = 0
+        end
+      else
+        self[:stack] = :permanent if self[:stack] == :suppressed
+      end
+
+      self
+    end
+
     def tick!
       self - 1
     end
