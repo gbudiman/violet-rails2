@@ -27,10 +27,6 @@ module Concerns
       end
     end
 
-    def maim!
-      self == :maimed
-    end
-
     def method_missing(m, *args)
       if m.to_s.last == '='
         raise InvalidAnatomy, "Invalid Anatomy: #{m.to_s[0..-2]}"
@@ -56,8 +52,24 @@ module Concerns
         @ancestor[@anatomy] = :maimed
       end
 
+      def sunder!
+        @ancestor[@anatomy] = :sundered
+      end
+
+      def pristine!
+        @ancestor[@anatomy] = :ok unless @ancestor.send("#{@anatomy}!") == :not_available
+      end
+
+      def repair!
+        @ancestor[@anatomy] = case @ancestor.send("#{@anatomy}!")
+        when :sundered then :maimed
+        when :maimed then :ok
+        when :ok then :ok
+        end
+      end
+
       def ok?
-        @ancestor[@anatomy] == :ok
+        @ancestor.send("#{@anatomy}!") == :ok
       end
     end
   end
