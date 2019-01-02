@@ -14,6 +14,6 @@ class State
     @resources = Resource.new(h[:resources])
     @skills = h[:skills]
     @effects = h[:effects].extend(Concerns::Effectable)
-    @anatomies = {}.extend(Concern::Anatomiable).import!(h[:anatomies])
+    @anatomies = {}.extend(Concerns::Anatomiable).import!(h[:anatomies])
   end
 end
