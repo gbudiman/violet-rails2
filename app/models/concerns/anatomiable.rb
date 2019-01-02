@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns
   module Anatomiable
     VALID_ANATOMIES = [
@@ -28,7 +30,7 @@ module Concerns
     end
 
     def method_missing(m, *args)
-      if m.to_s.last == '='
+      if m.to_s.last == "="
         raise InvalidAnatomy, "Invalid Anatomy: #{m.to_s[0..-2]}"
       end
 
@@ -62,9 +64,9 @@ module Concerns
 
       def repair!
         @ancestor[@anatomy] = case @ancestor.send("#{@anatomy}!")
-        when :sundered then :maimed
-        when :maimed then :ok
-        when :ok then :ok
+                              when :sundered then :maimed
+                              when :maimed then :ok
+                              when :ok then :ok
         end
       end
 
