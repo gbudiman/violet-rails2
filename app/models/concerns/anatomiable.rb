@@ -34,7 +34,7 @@ module Concerns
         raise InvalidAnatomy, "Invalid Anatomy: #{m.to_s[0..-2]}"
       end
 
-      raise
+      raise NoMethodError
     end
 
     class InvalidAnatomy < StandardError

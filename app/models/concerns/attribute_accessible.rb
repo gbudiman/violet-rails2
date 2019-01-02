@@ -5,9 +5,13 @@ module Concerns
     extend ActiveSupport::Concern
 
     def self.extended(base)
-      base.class::VALID_ATTRIBUTES.each do |key|
+      base.attributes.each do |key|
         define_method(key) do
-          instance_variable_get("@#{key}")
+          base[key]
+        end
+
+        define_method("#{key}=") do |value|
+          base[key] = value
         end
       end
     end

@@ -30,10 +30,11 @@ RSpec.describe State, type: :model do
         hand_off: :ok,
         arm_main: :ok,
         arm_off: :ok,
-        feet: :ok,
-        head: :ok,
+        foot_main: :ok,
+        foot_off: :ok,
         torso: :ok,
         hip: :ok,
+        slingback: :ok,
       },
       equipments: {
         hand_main: { props: [:sword], weight: 20 },
@@ -47,7 +48,7 @@ RSpec.describe State, type: :model do
   let(:stats) { subject.stats }
   let(:resources) { subject.resources }
   let(:effects) { subject.effects }
-  it { expect(subject.stats).to be_a_kind_of(State::Stat) }
+  it { expect(subject.stats).to be_a_kind_of(Hash) }
   it "expects stats to be initialized correctly" do
     [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb,
      :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
@@ -65,24 +66,24 @@ RSpec.describe State, type: :model do
       visceral_strength: stats.str.visceral_strength
     )
   end
-  it "expects resources to be initialized correctly" do
-    [:hp, :weight, :limit, :trance, :orb,
-     :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
-      expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
-      expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
+  # it "expects resources to be initialized correctly" do
+  #   [:hp, :weight, :limit, :trance, :orb,
+  #    :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
+  #     expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
+  #     expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
 
-      random_number = 2000
-      resources.send(key).capacity = random_number
-      expect(resources.send(key).send(:capacity)).to eq(random_number)
-    end
-  end
+  #     random_number = 2000
+  #     resources.send(key).capacity = random_number
+  #     expect(resources.send(key).send(:capacity)).to eq(random_number)
+  #   end
+  # end
 
-  context "effects" do
-    it "should be correctly accessible" do
-      effects.shield_slinger = { stack: :permanent }
-      ap effects
-      ap effects.shield_slinger
-      ap effects.shield_slinger.active?
-    end
-  end
+  # context "effects" do
+  #   it "should be correctly accessible" do
+  #     effects.shield_slinger = { stack: :permanent }
+  #     ap effects
+  #     ap effects.shield_slinger
+  #     ap effects.shield_slinger.active?
+  #   end
+  # end
 end
