@@ -1,6 +1,6 @@
 module Concerns
   module Statable
-    def self.extended(base) do
+    def self.extended(base)
       Concerns::Attributable::VALID_STATS.each do |key|
         define_method("#{key}=") do |value|
           self[key] = { base: value }.extend(Concerns::Statable::Summable)
@@ -14,14 +14,14 @@ module Concerns
           StatableProxy.new(self, key)
         end
       end 
-
-      base
     end
 
     def import!(h)
       Concerns::Attributable::VALID_STATS.each do |key|
         self.send("#{key}=", h[key] || 0)
       end
+
+      self
     end
 
     def attributes
