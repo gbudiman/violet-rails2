@@ -2,8 +2,20 @@
 
 require "rails_helper"
 
+module EffectTestable
+  def self.extended(base)
+    [:permanent_effect, :active_effect, :active_duration, :expired_effect, :expired_duration].each do |key|
+      define_method("#{key}=") do |h|
+        self[key] = define_effect(h).extend(Concerns::EffectQueryable)
+      end
+    end
+  end
+end
+
 RSpec.describe Concerns::EffectQueryable, type: :concern do
-  subject { {}.extend(Concerns::Effectable) }
+  subject do 
+    {}.extend(Concerns::Effectable, EffectTestable)
+  end
 
   before do
     subject.permanent_effect = { stack: :permanent }

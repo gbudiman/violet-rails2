@@ -2,6 +2,23 @@
 
 module Concerns
   module Effectable
+    def self.extended(base)
+      base.class.include Violet
+      base.submodules_of(:skills).each do |school|
+        base.class_of(:skills, school)::EFFECTS.each do |effect|
+          key = effect.to_sym
+
+          define_method(key) do
+            self[key]
+          end
+
+          define_method("#{key}=") do |h|
+            self[key] = define_effect(h).extend(Concerns::EffectQueryable)
+          end
+        end
+      end
+    end
+    
     def actives
       self.select { |k, v| v.active? }
     end
@@ -10,19 +27,19 @@ module Concerns
       self.select { |k, v| !v.active? }
     end
 
-    def method_missing(m, *args, &block)
-      if m.to_s.last == "="
-        h = args.first
+    def define_effect(h)
+      if h[:stack].present? && h[:duration].present?
+        raise ArgumentError, "Only either :stack or :duration qualifier may be present, not both"
+      elsif h[:stack].blank? && h[:duration].blank?
+        raise ArgumentError, "Either :stack or :duration must be specified"
+      end
 
-        if h[:stack].present? && h[:duration].present?
-          raise ArgumentError, "Only either :stack or :duration qualifier may be present, not both"
-        elsif h[:stack].blank? && h[:duration].blank?
-          raise ArgumentError, "Either :stack or :duration must be specified"
-        end
+      h
+    end
 
-        self[m[0..-2].to_sym] = h.extend(Concerns::EffectQueryable)
-      else
-        self[m]
+    def import!(h)
+      h.each do |k, v|
+        self.send(k, v)
       end
     end
   end

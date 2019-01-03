@@ -12,8 +12,8 @@ class State
   def initialize(h)
     @stats = {}.extend(Concerns::Statable).import!(h[:stats])
     @resources = {}.extend(Concerns::Resourceable).import!(h[:resources])
-    @skills = h[:skills]
-    @effects = h[:effects].extend(Concerns::Effectable).import!(h[:effects])
+    @skills = {}.extend(Concerns::Skillable).import!(h[:skills])
+    @effects = {}.extend(Concerns::Effectable).import!(h[:effects])
     @anatomies = {}.extend(Concerns::Anatomiable).import!(h[:anatomies])
   end
 end

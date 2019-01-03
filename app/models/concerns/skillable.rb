@@ -6,7 +6,7 @@ module Concerns
       base.class.include Violet
       base.submodules_of(:skills).each do |school|
         base.class_of(:skills, school)::SKILLS.each do |skill|
-          key = "#{school}_#{skill}".to_sym
+          key = skill.to_sym
           define_method(key) do
             self[key] || false
           end
