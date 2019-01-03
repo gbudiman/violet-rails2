@@ -4,6 +4,8 @@ module Violet
   module Skills
     class Shield
       include Concerns::Stateable
+      SKILLS = []
+      EFFECTS = []
 
       def initialize(state)
         super

@@ -4,6 +4,8 @@ module Violet
   module Skills
     class Stance
       include Concerns::Stateable
+      SKILLS = []
+      EFFECTS = []
 
       def initialize(state)
         super
