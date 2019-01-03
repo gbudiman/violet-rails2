@@ -1,13 +1,13 @@
 module Concerns
-  module Statable
+  module Resourceable
     def self.extended(base)
-      Concerns::Attributable::VALID_STATS.each do |key|
+      Concerns::Attributable::VALID_RESOURCES.each do |key|
         define_method("#{key}=") do |value|
-          self[key] = { base: value }.extend(Concerns::Statable::Summable)
+          self[key] = { current: value }.extend(Concerns::Resourceable::Queryable)
         end
 
         define_method("#{key}!") do
-          self[key].sum
+          self[key].current
         end
 
         define_method("#{key}") do
@@ -17,7 +17,7 @@ module Concerns
     end
 
     def import!(h)
-      Concerns::Attributable::VALID_STATS.each do |key|
+      Concerns::Attributable::VALID_RESOURCES.each do |key|
         self.send("#{key}=", h[key] || 0)
       end
 
@@ -26,7 +26,7 @@ module Concerns
 
     class StatableProxy
       attr_reader :field_accessor
-      delegate :aux, :auxes, :base, to: :field_accessor
+      delegate :current, to: :field_accessor
       def initialize(ancestor, attribute)
         @ancestor = ancestor
         @attribute = attribute
@@ -42,21 +42,9 @@ module Concerns
       end
     end
 
-    module Summable
-      def base
-        self[:base] || 0
-      end
-
-      def aux
-        self.select { |k, v| k != :base }.values.reduce(0, :+)
-      end
-
-      def auxes
-        self.select { |k, v| k != :base }
-      end
-
-      def sum
-        self.values.reduce(0, :+)
+    module Queryable
+      def current
+        self[:current] || 0
       end
     end
   end

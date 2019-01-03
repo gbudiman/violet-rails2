@@ -66,17 +66,17 @@ RSpec.describe State, type: :model do
       visceral_strength: stats.str.visceral_strength
     )
   end
-  # it "expects resources to be initialized correctly" do
-  #   [:hp, :weight, :limit, :trance, :orb,
-  #    :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
-  #     expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
-  #     expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
+  it "expects resources to be initialized correctly" do
+    [:hp, :weight, :limit, :trance, :orb,
+     :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
+      expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
+      expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
 
-  #     random_number = 2000
-  #     resources.send(key).capacity = random_number
-  #     expect(resources.send(key).send(:capacity)).to eq(random_number)
-  #   end
-  # end
+      random_number = 2000
+      resources.send(key).capacity = random_number
+      expect(resources.send(key).send(:capacity)).to eq(random_number)
+    end
+  end
 
   # context "effects" do
   #   it "should be correctly accessible" do
