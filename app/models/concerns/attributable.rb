@@ -7,7 +7,7 @@ module Concerns
     VALID_RESOURCES = VALID_MECHANICS + [:hp, :weight]
     ACCESSOR_STAT = :base
     ACCESSOR_RESOURCE = :current
-    
+
     extend ActiveSupport::Concern
 
     def initialize(valid_attributes, base_accessor = :base, **kwargs)

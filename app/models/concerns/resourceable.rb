@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Concerns
   module Resourceable
     def self.extended(base)
-      base.extend(Concerns::Baseable)
+      base.extend(Concerns::Proxyable)
     end
 
     def accessor
@@ -17,12 +19,8 @@ module Concerns
     end
 
     module Queryable
-      def current
-        self[:current] || 0
-      end
-
       def to_i
-        current
+        self[:current] || 0
       end
     end
   end

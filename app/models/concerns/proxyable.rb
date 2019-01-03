@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Concerns
-  module Baseable
+  module Proxyable
     def self.extended(base)
       base.valid_attributes.each do |key|
         define_method("#{key}=") do |value|
@@ -21,12 +23,13 @@ module Concerns
 
           self
         end
-      end 
+      end
     end
 
     class StatableProxy
       attr_reader :field_accessor
-      delegate :aux, :auxes, :base, to: :field_accessor
+      delegate :aux, :auxes, :to_i, to: :field_accessor
+
       def initialize(ancestor, attribute)
         @ancestor = ancestor
         @attribute = attribute
@@ -34,7 +37,7 @@ module Concerns
       end
 
       def method_missing(m, *args)
-        if m.to_s.last == '='
+        if m.to_s.last == "="
           @ancestor[@attribute]["#{m[0..-2]}".to_sym] = args.first
         else
           @ancestor[@attribute][m]

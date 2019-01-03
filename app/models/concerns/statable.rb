@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Concerns
   module Statable
     def self.extended(base)
-      base.extend(Concerns::Baseable)
+      base.extend(Concerns::Proxyable)
     end
 
     def accessor
@@ -17,10 +19,6 @@ module Concerns
     end
 
     module Summable
-      def base
-        self[:base] || 0
-      end
-
       def aux
         self.select { |k, v| k != :base }.values.reduce(0, :+)
       end
