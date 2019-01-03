@@ -1,50 +1,28 @@
 module Concerns
   module Resourceable
     def self.extended(base)
-      Concerns::Attributable::VALID_RESOURCES.each do |key|
-        define_method("#{key}=") do |value|
-          self[key] = { current: value }.extend(Concerns::Resourceable::Queryable)
-        end
-
-        define_method("#{key}!") do
-          self[key].current
-        end
-
-        define_method("#{key}") do
-          StatableProxy.new(self, key)
-        end
-      end 
+      base.extend(Concerns::Baseable)
     end
 
-    def import!(h)
-      Concerns::Attributable::VALID_RESOURCES.each do |key|
-        self.send("#{key}=", h[key] || 0)
-      end
-
-      self
+    def accessor
+      :current
     end
 
-    class StatableProxy
-      attr_reader :field_accessor
-      delegate :current, to: :field_accessor
-      def initialize(ancestor, attribute)
-        @ancestor = ancestor
-        @attribute = attribute
-        @field_accessor = @ancestor[@attribute]
-      end
+    def valid_attributes
+      Concerns::Attributable::VALID_RESOURCES
+    end
 
-      def method_missing(m, *args)
-        if m.to_s.last == '='
-          @ancestor[@attribute]["#{m[0..-2]}".to_sym] = args.first
-        else
-          @ancestor[@attribute][m]
-        end
-      end
+    def extension
+      Concerns::Resourceable::Queryable
     end
 
     module Queryable
       def current
         self[:current] || 0
+      end
+
+      def to_i
+        current
       end
     end
   end

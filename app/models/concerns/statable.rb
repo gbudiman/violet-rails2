@@ -1,45 +1,19 @@
 module Concerns
   module Statable
     def self.extended(base)
-      Concerns::Attributable::VALID_STATS.each do |key|
-        define_method("#{key}=") do |value|
-          self[key] = { base: value }.extend(Concerns::Statable::Summable)
-        end
-
-        define_method("#{key}!") do
-          self[key].sum
-        end
-
-        define_method("#{key}") do
-          StatableProxy.new(self, key)
-        end
-      end 
+      base.extend(Concerns::Baseable)
     end
 
-    def import!(h)
-      Concerns::Attributable::VALID_STATS.each do |key|
-        self.send("#{key}=", h[key] || 0)
-      end
-
-      self
+    def accessor
+      :base
     end
 
-    class StatableProxy
-      attr_reader :field_accessor
-      delegate :aux, :auxes, :base, to: :field_accessor
-      def initialize(ancestor, attribute)
-        @ancestor = ancestor
-        @attribute = attribute
-        @field_accessor = @ancestor[@attribute]
-      end
+    def valid_attributes
+      Concerns::Attributable::VALID_STATS
+    end
 
-      def method_missing(m, *args)
-        if m.to_s.last == '='
-          @ancestor[@attribute]["#{m[0..-2]}".to_sym] = args.first
-        else
-          @ancestor[@attribute][m]
-        end
-      end
+    def extension
+      Concerns::Statable::Summable
     end
 
     module Summable
@@ -55,7 +29,7 @@ module Concerns
         self.select { |k, v| k != :base }
       end
 
-      def sum
+      def to_i
         self.values.reduce(0, :+)
       end
     end
