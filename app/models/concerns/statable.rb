@@ -1,18 +1,22 @@
 module Concerns
   module Statable
-    Concerns::Attributable::VALID_STATS.each do |key|
-      define_method("#{key}=") do |value|
-        self[key] = { base: value }.extend(Concerns::Statable::Summable)
-      end
+    def self.extended(base) do
+      Concerns::Attributable::VALID_STATS.each do |key|
+        define_method("#{key}=") do |value|
+          self[key] = { base: value }.extend(Concerns::Statable::Summable)
+        end
 
-      define_method("#{key}!") do
-        self[key].sum
-      end
+        define_method("#{key}!") do
+          self[key].sum
+        end
 
-      define_method("#{key}") do
-        StatableProxy.new(self, key)
-      end
-    end 
+        define_method("#{key}") do
+          StatableProxy.new(self, key)
+        end
+      end 
+
+      base
+    end
 
     def import!(h)
       Concerns::Attributable::VALID_STATS.each do |key|
