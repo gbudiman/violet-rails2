@@ -27,6 +27,8 @@ module Concerns
       h.each do |key, value|
         self.send("#{key}=", value)
       end
+
+      self
     end
 
     def method_missing(m, *args)
