@@ -19,9 +19,9 @@ RSpec.describe State, type: :model do
         limit: 8,
       },
       skills: {
-        limit_break_mechanics: true,
-        limit_break_redux: true,
-        limit_break_steel_lung: true,
+        limit_mechanics: true,
+        limit_redux: true,
+        limit_steel_lung: true,
         shield_slinger: true,
       },
       effects: {},

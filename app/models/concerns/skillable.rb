@@ -7,19 +7,25 @@ module Concerns
       base.submodules_of(:skills).each do |school|
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = "#{school}_#{skill}".to_sym
-          define_method("#{school}_#{skill}") do
-            self[key]
+          define_method(key) do
+            self[key] || false
           end
 
-          define_method("#{school}_#{skill}=") do |value|
+          define_method("#{key}=") do |value|
             self[key] = value
+          end
+
+          define_method("#{key}?") do
+            self[key] == true
           end
         end
       end
-      # Violet::SKILLS.each do |sk|
-      #   ap sk
-      #   ap base
-      # end
+    end
+
+    def import!(h)
+      h.each do |k, v|
+        self[k] = v
+      end
     end
   end
 end
