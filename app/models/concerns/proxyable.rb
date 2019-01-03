@@ -13,7 +13,7 @@ module Concerns
         end
 
         define_method("#{key}") do
-          StatableProxy.new(self, key)
+          ExtensionProxy.new(self, key)
         end
 
         define_method(:import!) do |h|
@@ -26,7 +26,7 @@ module Concerns
       end
     end
 
-    class StatableProxy
+    class ExtensionProxy
       attr_reader :field_accessor
       delegate :aux, :auxes, :to_i, to: :field_accessor
 
