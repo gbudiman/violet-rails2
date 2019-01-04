@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Concerns::EffectQueryable, type: :concern do
+RSpec.describe Concerns::EffectQueryable, type: :model do
   subject { {}.extend(Concerns::Effectable) }
 
   it "should initialize effect properly" do

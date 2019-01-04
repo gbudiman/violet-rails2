@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Violet::Equipments, type: :module do
+RSpec.describe Violet::Equipments, type: :model do
   class Dummy
     include Violet::Equipments
     attr_accessor :state

@@ -19,6 +19,10 @@ module Concerns
     end
 
     module Queryable
+      def auxes
+        self.select { |k, v| k != :current }
+      end
+
       def to_i
         self[:current] || 0
       end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Concerns::Weaponizable, type: :concern do
+RSpec.describe Concerns::Weaponizable, type: :model do
   class Dummy
     include Concerns::Weaponizable
   end

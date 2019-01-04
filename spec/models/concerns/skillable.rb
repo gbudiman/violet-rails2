@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Concerns::Skillable, type: :concern do
+RSpec.describe Concerns::Skillable, type: :model do
   subject { {}.extend(Concerns::Skillable) }
 
   it "should initialize skill properly" do

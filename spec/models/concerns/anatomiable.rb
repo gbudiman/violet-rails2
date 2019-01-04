@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Concerns::Anatomiable, type: :concern do
+RSpec.describe Concerns::Anatomiable, type: :model do
   subject { {}.extend(Concerns::Anatomiable) }
 
   context "#import!" do
