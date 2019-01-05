@@ -15,5 +15,6 @@ class State
     @skills = {}.extend(Concerns::Skillable).import!(h[:skills])
     @effects = {}.extend(Concerns::Effectable).import!(h[:effects])
     @anatomies = {}.extend(Concerns::Anatomiable).import!(h[:anatomies])
+    @equipments = {}.extend(Concerns::Equippable).import!(h[:equipments])
   end
 end

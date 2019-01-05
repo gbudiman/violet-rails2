@@ -2,6 +2,7 @@
 
 module Concerns
   module Weaponizable
+    VALID_WEAPONIZABLE = [:hand_main, :hand_off]
     extend ActiveSupport::Concern
     include Concerns::Stateable
 
