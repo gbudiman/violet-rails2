@@ -4,7 +4,7 @@ module Violet
   module Skills
     class Limit
       include Concerns::Stateable
-      SKILLS = [:mechanics, :redux, :steel_lung]
+      SKILLS = [:limit_mechanics, :limit_redux, :limit_steel_lung]
       EFFECTS = []
 
       def initialize(state)
