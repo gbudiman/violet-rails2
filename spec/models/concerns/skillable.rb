@@ -26,6 +26,17 @@ RSpec.describe Concerns::Skillable, type: :model do
       subject.disable!(:limit_redux)
       expect(subject.has?(:limit_redux)).to eq false
       expect(subject.has?(:limit_redux, any_state: true)).to eq true
+
+      subject.enable!(:limit_redux)
+      expect(subject.has?(:limit_redux)).to eq true
+      expect(subject.has?(:limit_redux, any_state: true)).to eq true
+    end
+
+    it 'should not re-enable non-existing skill' do
+      expect(subject.has?(:limit_steel_lung)).to eq false
+      subject.enable!(:limit_steel_lung)
+      expect(subject.has?(:limit_steel_lung)).to eq false
+      expect(subject.has?(:limit_steel_lung, any_state: true)).to eq false
     end
   end
 end

@@ -34,10 +34,12 @@ module Concerns
     end
 
     def has?(skill, any_state: false)
+      proxied_skill = self.send("#{skill}")
       if any_state
-        self.key?(skill)
+        (proxied_skill.available? || proxied_skill.disabled?) == true
       else
-        self.send("#{skill}!") == true
+        #self.send("#{skill}!") == true
+        proxied_skill.available? == true
       end
     end
 
@@ -50,7 +52,11 @@ module Concerns
     end
 
     def disable!(*skills)
-      set!(false, skills)
+      set!(:disabled, skills)
+    end
+
+    def enable!(*skills)
+      set!(true, skills)
     end
   end
 
@@ -63,6 +69,10 @@ module Concerns
 
     def disabled?
       @target == :disabled
+    end
+
+    def available?
+      @target == true
     end
 
     def set!(val)
