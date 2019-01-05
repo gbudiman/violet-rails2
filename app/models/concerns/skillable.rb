@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns
   module Skillable
     extend ActiveSupport::Concern
@@ -38,7 +40,6 @@ module Concerns
       if any_state
         (proxied_skill.available? || proxied_skill.disabled?) == true
       else
-        #self.send("#{skill}!") == true
         proxied_skill.available? == true
       end
     end

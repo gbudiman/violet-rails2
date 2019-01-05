@@ -18,7 +18,7 @@ module Concerns
         end
       end
     end
-    
+
     def actives
       self.select { |k, v| v.active? }
     end

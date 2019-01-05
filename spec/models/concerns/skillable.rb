@@ -16,13 +16,13 @@ RSpec.describe Concerns::Skillable, type: :model do
     expect(subject.limit_redux?).to eq false
   end
 
-  context 'temporary disabler' do
+  context "temporary disabler" do
     before do
       subject.limit_redux = true
       expect(subject.has?(:limit_redux)).to eq true
     end
 
-    it 'should allow temporarily disabling skills' do
+    it "should allow temporarily disabling skills" do
       subject.disable!(:limit_redux)
       expect(subject.has?(:limit_redux)).to eq false
       expect(subject.has?(:limit_redux, any_state: true)).to eq true
@@ -32,7 +32,7 @@ RSpec.describe Concerns::Skillable, type: :model do
       expect(subject.has?(:limit_redux, any_state: true)).to eq true
     end
 
-    it 'should not re-enable non-existing skill' do
+    it "should not re-enable non-existing skill" do
       expect(subject.has?(:limit_steel_lung)).to eq false
       subject.enable!(:limit_steel_lung)
       expect(subject.has?(:limit_steel_lung)).to eq false

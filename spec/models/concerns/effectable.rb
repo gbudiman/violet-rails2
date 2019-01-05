@@ -13,7 +13,7 @@ module EffectTestable
 end
 
 RSpec.describe Concerns::EffectQueryable, type: :model do
-  subject do 
+  subject do
     {}.extend(Concerns::Effectable, EffectTestable)
   end
 
