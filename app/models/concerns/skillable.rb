@@ -33,15 +33,14 @@ module Concerns
       h.each do |k, v|
         self[k] = v
       end
+
+      self
     end
 
     def has?(skill, any_state: false)
+      return false unless has_key?(skill)
       proxied_skill = self.send("#{skill}")
-      if any_state
-        (proxied_skill.available? || proxied_skill.disabled?) == true
-      else
-        proxied_skill.available? == true
-      end
+      (proxied_skill.available? || (any_state && proxied_skill.disabled?)) == true
     end
 
     def set!(state, *skills)

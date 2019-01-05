@@ -48,6 +48,8 @@ RSpec.describe State, type: :model do
   let(:stats) { subject.stats }
   let(:resources) { subject.resources }
   let(:effects) { subject.effects }
+  let(:skills) { subject.skills }
+
   it { expect(subject.stats).to be_a_kind_of(Hash) }
   it "expects stats to be initialized correctly" do
     [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb,
@@ -78,12 +80,10 @@ RSpec.describe State, type: :model do
     end
   end
 
-  # context "effects" do
-  #   it "should be correctly accessible" do
-  #     effects.shield_slinger = { stack: :permanent }
-  #     ap effects
-  #     ap effects.shield_slinger
-  #     ap effects.shield_slinger.active?
-  #   end
-  # end
+  context "skills" do
+    it "should be correctly accessible" do
+      expect(skills.has?(:shield_slinger)).to eq true
+      expect(skills.has?(:random_dne)).to eq false
+    end
+  end
 end
