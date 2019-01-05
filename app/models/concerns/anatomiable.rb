@@ -32,11 +32,8 @@ module Concerns
     end
 
     def method_missing(m, *args)
-      if m.to_s.last == "="
-        raise InvalidAnatomy, "Invalid Anatomy: #{m.to_s[0..-2]}"
-      end
-
-      raise NoMethodError
+      requested_anatomy = m.to_s.gsub(/\=/, '')
+      raise InvalidAnatomy, "Invalid Anatomy: #{requested_anatomy}"
     end
 
     class InvalidAnatomy < StandardError

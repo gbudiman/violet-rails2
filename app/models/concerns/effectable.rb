@@ -41,6 +41,8 @@ module Concerns
       h.each do |k, v|
         self.send(k, v)
       end
+
+      self
     end
   end
 end

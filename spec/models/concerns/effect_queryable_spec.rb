@@ -2,8 +2,22 @@
 
 require "rails_helper"
 
+module EffectQueryTestable
+  def self.extended(base)
+    [:dummy_effect, :efx].each do |key|
+      define_method(key) do
+        self[key]
+      end
+
+      define_method("#{key}=") do |h|
+        self[key] = define_effect(h).extend(Concerns::EffectQueryable)
+      end
+    end
+  end
+end
+
 RSpec.describe Concerns::EffectQueryable, type: :model do
-  subject { {}.extend(Concerns::Effectable) }
+  subject { {}.extend(Concerns::Effectable, EffectQueryTestable) }
 
   it "should initialize effect properly" do
     subject.dummy_effect = { stack: :permanent }
