@@ -45,7 +45,7 @@ module Concerns
       end
 
       def method_missing(m, *args)
-        @target.public_send(m)
+        @target.public_send(m, *args)
       end
     end
 
@@ -59,6 +59,7 @@ module Concerns
         when :weight
           self[prop] = values
           define_singleton_method(prop) { self[prop] }
+          define_singleton_method("#{prop}=") { |v| self[prop] = v }
         end
       end
 

@@ -28,5 +28,13 @@ RSpec.describe Concerns::Equippable, type: :model do
       expect(subject.arm_off.available?).to eq false
       expect(subject.arm_off.equippable?).to eq false
     end
+
+    it "should allow weight adjustment" do
+      subject.hand_main.weight = 32
+      expect(subject.hand_main.weight).to eq 32
+
+      subject[:hand_main][:weight] = 64
+      expect(subject.hand_main.weight).to eq 64
+    end
   end
 end
