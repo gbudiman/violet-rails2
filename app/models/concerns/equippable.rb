@@ -30,9 +30,6 @@ module Concerns
     end
 
     class EquippableProxy
-      #attr_reader :target
-      #delegate_missing_to :target
-
       def initialize(ancestor, attribute)
         @ancestor = ancestor
         @attribute = attribute
@@ -48,7 +45,7 @@ module Concerns
       end
 
       def method_missing(m, *args)
-        @target.send(m)
+        @target.public_send(m)
       end
     end
 
