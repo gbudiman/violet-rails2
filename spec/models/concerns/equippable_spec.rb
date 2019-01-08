@@ -36,5 +36,16 @@ RSpec.describe Concerns::Equippable, type: :model do
       subject[:hand_main][:weight] = 64
       expect(subject.hand_main.weight).to eq 64
     end
+
+    context "weaponizable" do
+      context "#disarm" do
+        it "should be disarmable" do
+          disarmed = subject.hand_main.disarm!
+          expect(subject.hand_main.available?).to eq true
+          expect(subject.hand_main.equippable?).to eq true
+          expect(disarmed).to eq(input[:hand_main])
+        end
+      end
+    end
   end
 end

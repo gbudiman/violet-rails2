@@ -10,14 +10,12 @@ module Concerns
 
         define_method("#{anatomy}=") do |value|
           self[anatomy] = value.extend(EquipQueryable)
+          value.extend(EquipOperable) if anatomy.in?(Concerns::Weaponizable::VALID_WEAPONIZABLE)
 
           value.each do |prop, propval|
             self[anatomy].define!(prop, propval)
           end
         end
-      end
-
-      Concerns::Weaponizable::VALID_WEAPONIZABLE.each do |anatomy|
       end
     end
 
@@ -44,6 +42,12 @@ module Concerns
         !@target.nil? && @target.blank?
       end
 
+      def disarm!
+        return unless @target.disarmable?
+        @ancestor[@attribute] = {}
+        @target
+      end
+
       def method_missing(m, *args)
         @target.public_send(m, *args)
       end
@@ -65,6 +69,18 @@ module Concerns
 
       def method_missing(m, *args)
         return false
+      end
+    end
+
+    module EquipOperable
+      # def self.extended(base)
+      #   base.define_method(:disarm!) do
+      #     ap base
+      #     base = {}
+      #   end
+      # end
+      def disarmable?
+        true
       end
     end
   end
