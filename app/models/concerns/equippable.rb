@@ -42,10 +42,23 @@ module Concerns
         !@target.nil? && @target.blank?
       end
 
-      def disarm!
+      def disarm!(forced: true)
         return unless @target.disarmable?
         @ancestor[@attribute] = {}
         @target
+      end
+
+      def drop!
+        disarm!(forced: false)
+      end
+
+      def holster!
+      end
+
+      def equip! item
+      end
+
+      def pickup! item
       end
 
       def method_missing(m, *args)
@@ -73,12 +86,6 @@ module Concerns
     end
 
     module EquipOperable
-      # def self.extended(base)
-      #   base.define_method(:disarm!) do
-      #     ap base
-      #     base = {}
-      #   end
-      # end
       def disarmable?
         true
       end
