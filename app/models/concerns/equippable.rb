@@ -28,6 +28,9 @@ module Concerns
     end
 
     class EquippableProxy
+      attr_reader :target
+      #delegate :maim!, :sunder!, :pristine!, :repair!, to: :target
+
       def initialize(ancestor, attribute)
         @ancestor = ancestor
         @attribute = attribute
@@ -35,7 +38,7 @@ module Concerns
       end
 
       def available?
-        @target.is_a?(Hash)
+        @target.is_a?(Hash) #&& !@target.sundered?
       end
 
       def equippable?
@@ -91,12 +94,24 @@ module Concerns
       end
 
       def maim!
+        self[:maimed] = true
+      end
+
+      def maimed?
+        self[:maimed] == true
       end
 
       def sunder!
+        self[:sundered] = true
+      end
+
+      def sundered?
+        self[:sundered] == true
       end
 
       def pristine!
+        self.delete(:maimed)
+        self.delete(:sundered)
       end
 
       def repair!

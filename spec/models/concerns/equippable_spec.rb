@@ -39,11 +39,18 @@ RSpec.describe Concerns::Equippable, type: :model do
 
     context "weaponizable" do
       context "#disarm!" do
-        it "should be disarmable" do
+        it "should disarm target" do
           disarmed = subject.hand_main.disarm!
           expect(subject.hand_main.available?).to eq true
           expect(subject.hand_main.equippable?).to eq true
           expect(disarmed).to eq(input[:hand_main])
+        end
+      end
+
+      context "#maim" do
+        it "should main target" do
+          subject.hand_main.maim!
+          expect(subject.hand_main.maimed?).to eq(true)
         end
       end
 
