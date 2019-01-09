@@ -48,12 +48,15 @@ RSpec.describe Concerns::Equippable, type: :model do
       end
 
       context "#drop!" do
+        pending
       end
 
       context "#holster!" do
+        pending
       end
       
       context "#equip" do
+        pending
       end
     end
   end

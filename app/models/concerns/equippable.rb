@@ -89,6 +89,18 @@ module Concerns
       def disarmable?
         true
       end
+
+      def maim!
+      end
+
+      def sunder!
+      end
+
+      def pristine!
+      end
+
+      def repair!
+      end
     end
   end
 end
