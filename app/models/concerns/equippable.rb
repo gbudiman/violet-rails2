@@ -32,9 +32,6 @@ module Concerns
     end
 
     class EquippableProxy
-      attr_reader :target
-      #delegate :maim!, :sunder!, :pristine!, :repair!, to: :target
-
       def initialize(ancestor, attribute)
         @ancestor = ancestor
         @attribute = attribute
@@ -50,7 +47,6 @@ module Concerns
       end
 
       def method_missing(m, *args)
-        #ap "missing from Proxy: #{m}"
         @target.public_send(m, *args)
       end
     end
@@ -74,7 +70,6 @@ module Concerns
       end
 
       def method_missing(m, *args)
-        #ap "missing from EquipQueryable: #{m}"
         false
       end
     end
@@ -131,7 +126,6 @@ module Concerns
       end
 
       def method_missing(m, *args)
-        #ap "missing from EquipOperable: #{m}"
         false
       end
     end
