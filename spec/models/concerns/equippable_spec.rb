@@ -48,9 +48,24 @@ RSpec.describe Concerns::Equippable, type: :model do
       end
 
       context "#maim" do
-        it "should main target" do
+        it "should maim target" do
           subject.hand_main.maim!
           expect(subject.hand_main.maimed?).to eq(true)
+          expect(subject.hand_main.available?).to eq(true)
+          expect(subject.hand_main.equippable?).to eq(false)
+          expect(subject.hand_main.usable?).to eq(false)
+          expect(subject.hand_main.holding_something?).to eq(true)
+        end
+      end
+
+      context "#sunder" do
+        it "should sunder target" do
+          subject.hand_main.sunder!
+          expect(subject.hand_main.sundered?).to eq(true)
+          expect(subject.hand_main.available?).to eq(true)
+          expect(subject.hand_main.equippable?).to eq(false)
+          expect(subject.hand_main.usable?).to eq(false)
+          expect(subject.hand_main.holding_something?).to eq(false)
         end
       end
 

@@ -9,8 +9,12 @@ module Concerns
         end
 
         define_method("#{anatomy}=") do |value|
-          self[anatomy] = value.extend(EquipQueryable)
-          value.extend(EquipOperable) if anatomy.in?(Concerns::Weaponizable::VALID_WEAPONIZABLE)
+          self[anatomy] = value
+          if anatomy.in?(Concerns::Weaponizable::VALID_WEAPONIZABLE)
+            self[anatomy].extend(EquipWeaponizable) 
+          else
+            self[anatomy].extend(EquipQueryable)
+          end
 
           value.each do |prop, propval|
             self[anatomy].define!(prop, propval)
@@ -38,33 +42,15 @@ module Concerns
       end
 
       def available?
-        @target.is_a?(Hash) #&& !@target.sundered?
+        @target.is_a?(Hash)
       end
 
       def equippable?
         !@target.nil? && @target.blank?
       end
 
-      def disarm!(forced: true)
-        return unless @target.disarmable?
-        @ancestor[@attribute] = {}
-        @target
-      end
-
-      def drop!
-        disarm!(forced: false)
-      end
-
-      def holster!
-      end
-
-      def equip! item
-      end
-
-      def pickup! item
-      end
-
       def method_missing(m, *args)
+        #ap "missing from Proxy: #{m}"
         @target.public_send(m, *args)
       end
     end
@@ -83,14 +69,21 @@ module Concerns
         end
       end
 
+      def holding_something?
+        self.key?(:props) && self.key?(:weight)
+      end
+
       def method_missing(m, *args)
-        return false
+        #ap "missing from EquipQueryable: #{m}"
+        false
       end
     end
 
-    module EquipOperable
-      def disarmable?
-        true
+    module EquipWeaponizable
+      include EquipQueryable
+
+      def usable?
+        !sundered? && !maimed?
       end
 
       def maim!
@@ -102,6 +95,7 @@ module Concerns
       end
 
       def sunder!
+        drop!
         self[:sundered] = true
       end
 
@@ -115,6 +109,30 @@ module Concerns
       end
 
       def repair!
+      end
+
+      def disarm!(forced: true)
+        cached = self
+        self.clear
+        cached
+      end
+
+      def drop!
+        disarm!(forced: false)
+      end
+
+      def holster!
+      end
+
+      def equip! item
+      end
+
+      def pickup! item
+      end
+
+      def method_missing(m, *args)
+        #ap "missing from EquipOperable: #{m}"
+        false
       end
     end
   end
