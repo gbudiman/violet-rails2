@@ -9,7 +9,7 @@ module Concerns
         end
 
         define_method("#{anatomy}=") do |value|
-          self[anatomy] = value
+          self[anatomy] = value.dup
           if anatomy.in?(Concerns::Weaponizable::VALID_WEAPONIZABLE)
             self[anatomy].extend(EquipWeaponizable) 
           else
@@ -107,7 +107,7 @@ module Concerns
       end
 
       def disarm!(forced: true)
-        cached = self
+        cached = self.dup
         self.clear
         cached
       end
