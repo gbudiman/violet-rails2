@@ -6,8 +6,7 @@ class State
               :skills,
               :effects,
               :anatomies,
-              :equipments,
-              :inventories
+              :equipments
 
   def initialize(h)
     @stats = {}.extend(Concerns::Statable).import!(h[:stats])

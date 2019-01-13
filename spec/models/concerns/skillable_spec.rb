@@ -16,6 +16,23 @@ RSpec.describe Concerns::Skillable, type: :model do
     expect(subject.limit_redux?).to eq false
   end
 
+  context "querying" do
+    before do
+      subject.all!(true, :limit_mechanics, :limit_redux)
+    end
+
+    it "invokes MultiQueryable methods correctly" do
+      expect(subject.has_all?(:limit_mechanics, :limit_redux)).to eq(true)
+      expect(subject.has_all?(:limit_mechanics, :limit_redux, :limit_steel_lung)).to eq(false)
+      expect(subject.has_all?(:limit_mechanics)).to eq(true)
+      expect(subject.has_all?(:limit_steel_lung, :limit_redux)).to eq(false)
+      expect(subject.has_one?(:limit_mechanics)).to eq(true)
+      expect(subject.has_one?(:limit_mechanics, :limit_redux)).to eq(true)
+      expect(subject.has_one?(:limit_mechanics, :limit_redux, :limit_steel_lung)).to eq(true)
+      expect(subject.has_one?(:limit_steel_lung)).to eq(false)
+    end
+  end
+
   context "temporary disabler" do
     before do
       subject.limit_redux = true

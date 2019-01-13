@@ -5,8 +5,8 @@ class Agent < ApplicationRecord
 
   belongs_to :battlefield
   after_initialize :copy_initial_state, :generate_uuid
-  after_find :apply_recursive_open_struct
-  after_commit :apply_recursive_open_struct, on: [:create, :update]
+  after_find :load_state
+  after_commit :load_state, on: [:create, :update]
 
   delegate :anatomies, to: :workable_state
   delegate :effects, to: :workable_state
@@ -41,7 +41,11 @@ private
     self.uuid = SecureRandom.uuid
   end
 
-  def apply_recursive_open_struct
-    @workable_state = RecursiveOpenStruct.new(self.current_state)
+  def load_state
+    @workable_state = State.new(self.current_state.deep_symbolize_keys)
   end
+
+  # def apply_recursive_open_struct
+  #   @workable_state = RecursiveOpenStruct.new(self.current_state)
+  # end
 end

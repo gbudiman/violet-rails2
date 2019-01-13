@@ -10,6 +10,7 @@ module Concerns
 
     VALID_ANATOMIES.each do |anatomy|
       define_method("#{anatomy}=") do |value|
+        value = value.to_sym
         raise InvalidState, "Invalid State: #{value} on Anatomy: #{anatomy}" unless VALID_STATE.include?(value)
         self[anatomy] = value
       end

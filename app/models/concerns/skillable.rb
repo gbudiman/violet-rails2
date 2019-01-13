@@ -6,6 +6,7 @@ module Concerns
 
     def self.extended(base)
       base.class.include Violet
+      base.class.include Concerns::MultiQueryable
       base.submodules_of(:skills).each do |school|
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = skill.to_sym

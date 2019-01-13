@@ -12,35 +12,35 @@ RSpec.describe Agent, type: :model do
         int:  1,
         vit: 77,
         fai: 16,
-        hp: 1000,
         limit: 32,
       },
       resources: {
-        hp: { current: 500 },
-        limit: { current: 8 },
+        hp: 500,
+        limit: 8,
       },
       skills: {
-        limit_break_mechanics: true,
-        limit_break_redux: true,
-        limit_break_steel_lung: true,
+        limit_mechanics: true,
+        limit_redux: true,
+        limit_steel_lung: true,
         shield_slinger: true,
       },
       effects: {},
-      anatomy: {
+      anatomies: {
         hand_main: :ok,
         hand_off: :ok,
         arm_main: :ok,
         arm_off: :ok,
-        feet: :ok,
+        foot_main: :ok,
+        foot_off: :ok,
         head: :ok,
         torso: :ok,
         hip: :ok,
+        slingback: :ok
       },
       equipments: {
         hand_main: { props: [:sword], weight: 20 },
         hand_off: { props: [:shield], weight: 18 },
       },
-      inventories: {},
     }
   end
 
@@ -61,7 +61,7 @@ RSpec.describe Agent, type: :model do
 
     it "should automatically convert current_state to OpenStruct" do
       agent = Agent.find(@agent.id)
-      expect(agent.stats.str).to be_a_kind_of(Integer)
+      expect(agent.stats.str!).to be_a_kind_of(Integer)
     end
 
     context "preprocessing" do
