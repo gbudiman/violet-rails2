@@ -11,12 +11,22 @@ RSpec.describe Concerns::Equippable, type: :model do
         hand_main: { props: [:sword, :steel], weight: 20 },
         hand_off: { props: [:shield, :wooden], weight: 18 },
         arm_main: {},
+        slingback: { 
+          props: [:slingback, :leather],
+          weight: 1,
+          contents: [
+            { props: [:arrow, :iron], weight: 0.1 },
+            { props: [:arrow, :iron], weight: 0.1 },
+            { props: [:arrow, :iron], weight: 0.1 },
+            { props: [:arrow, :iron], weight: 0.1 },
+          ]
+        }
       }
     end
 
     before { subject.import!(input) }
 
-    it "should store object properties correctly" do
+    it "stores object properties correctly" do
       expect(subject.hand_main.available?).to eq true
       expect(subject.hand_main.equippable?).to eq false
       expect(subject.hand_main.sword?).to eq true
@@ -29,7 +39,7 @@ RSpec.describe Concerns::Equippable, type: :model do
       expect(subject.arm_off.equippable?).to eq false
     end
 
-    it "should allow weight adjustment" do
+    it "allows weight adjustment" do
       subject.hand_main.weight = 32
       expect(subject.hand_main.weight).to eq 32
 
@@ -37,9 +47,18 @@ RSpec.describe Concerns::Equippable, type: :model do
       expect(subject.hand_main.weight).to eq 64
     end
 
+    context "query" do
+      context "#holding" do
+        it "returns anatomy object holding requested properties" do
+          expect(subject.holding(:sword).keys).to contain_exactly(:hand_main)
+          expect(subject.holding(:steel, :leather).keys).to contain_exactly(:hand_main, :slingback)
+        end
+      end
+    end
+
     context "weaponizable" do
       context "#disarm!" do
-        it "should disarm target" do
+        it "disarms target" do
           disarmed = subject.hand_main.disarm!
           expect(subject.hand_main.available?).to eq true
           expect(subject.hand_main.equippable?).to eq true
@@ -48,7 +67,7 @@ RSpec.describe Concerns::Equippable, type: :model do
       end
 
       context "#maim" do
-        it "should maim target" do
+        it "maims target" do
           subject.hand_main.maim!
           expect(subject.hand_main.maimed?).to eq(true)
           expect(subject.hand_main.available?).to eq(true)
@@ -59,7 +78,7 @@ RSpec.describe Concerns::Equippable, type: :model do
       end
 
       context "#sunder" do
-        it "should sunder target" do
+        it "sunders target" do
           subject.hand_main.sunder!
           expect(subject.hand_main.sundered?).to eq(true)
           expect(subject.hand_main.available?).to eq(true)

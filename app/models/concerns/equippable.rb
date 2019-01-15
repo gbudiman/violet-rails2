@@ -31,6 +31,14 @@ module Concerns
       self
     end
 
+    def holding(*args)
+      args.each_with_object({}) do |arg, m|
+        self.select { |anatomy, _| self.send(anatomy).send("#{arg}?") }.each do |k, v|
+          m[k] = v
+        end
+      end
+    end
+
     class EquippableProxy
       def initialize(ancestor, attribute)
         @ancestor = ancestor
