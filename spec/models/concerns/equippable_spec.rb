@@ -53,6 +53,17 @@ RSpec.describe Concerns::Equippable, type: :model do
           expect(subject.holding(:sword).keys).to contain_exactly(:hand_main)
           expect(subject.holding(:steel, :leather).keys).to contain_exactly(:hand_main, :slingback)
         end
+
+        context "result" do
+          let(:query) { subject.holding(:steel, :leather) }
+
+          it "is manipulatable" do
+            query.each { |k, v| v.weight *= 2}
+            query.each do |k, v|
+              expect(subject.send(k).weight).to eq(input[k][:weight] * 2)
+            end
+          end
+        end
       end
     end
 
