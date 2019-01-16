@@ -40,7 +40,6 @@ RSpec.describe State, type: :model do
         hand_main: { props: [:sword], weight: 20 },
         hand_off: { props: [:shield], weight: 18 },
       },
-      inventories: {},
     }
   end
 
