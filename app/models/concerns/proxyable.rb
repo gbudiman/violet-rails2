@@ -5,7 +5,8 @@ module Concerns
     def self.extended(base)
       base.valid_attributes.each do |key|
         define_method("#{key}=") do |value|
-          self[key] = { base.accessor => value }.extend(base.extension)
+          self[key] ||= {}.extend(base.extension)
+          self[key][base.accessor] = value
         end
 
         define_method("#{key}!") do
@@ -28,7 +29,7 @@ module Concerns
 
     class ExtensionProxy
       attr_reader :field_accessor
-      delegate :aux, :auxes, :to_i, to: :field_accessor
+      delegate :aux, :auxes, :to_i, :capacity, :capacity=, to: :field_accessor
 
       def initialize(ancestor, attribute)
         @ancestor = ancestor

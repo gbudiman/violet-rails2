@@ -26,8 +26,6 @@ class Agent < ApplicationRecord
         class_of(mod, submod).new(@workable_state)
       end
     end
-
-    # ap workable_state
   end
 
 private
@@ -44,8 +42,4 @@ private
   def load_state
     @workable_state = State.new(self.current_state.deep_symbolize_keys)
   end
-
-  # def apply_recursive_open_struct
-  #   @workable_state = RecursiveOpenStruct.new(self.current_state)
-  # end
 end

@@ -54,6 +54,12 @@ module Concerns
         !@target.nil? && @target.blank?
       end
 
+      # def callbacks(name)
+      #   ap "called with #{name}"
+      # end
+
+
+
       def method_missing(m, *args)
         @target.public_send(m, *args)
       end
@@ -75,6 +81,22 @@ module Concerns
 
       def holding_something?
         self.key?(:props) && self.key?(:weight)
+      end
+
+      def callbacks(name, prop, block)
+        self[:callbacks] ||= {}
+        self[:callbacks][name.to_sym] = {
+          props: prop.is_a?(Array) ? prop : [prop],
+          block: block
+        }
+      end
+
+      def execute_callback(prop)
+        self[:callbacks]&.each do |key, value|
+          return value[:block].call if value[:props].include?(prop)
+        end
+
+        yield 
       end
 
       def method_missing(m, *args)

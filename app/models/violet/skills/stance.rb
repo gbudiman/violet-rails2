@@ -5,7 +5,9 @@ module Violet
     class Stance
       include Concerns::Stateable
       SKILLS = []
-      EFFECTS = []
+      cattr_reader :effects do
+        %i[]
+      end
 
       def initialize(state)
         super

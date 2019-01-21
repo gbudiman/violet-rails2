@@ -81,7 +81,7 @@ RSpec.describe State, type: :model do
   end
 
   context "skills" do
-    it "should be correctly accessible" do
+    it "is correctly queryable" do
       expect(skills.has?(:shield_slinger)).to eq true
       expect(skills.has?(:random_dne)).to eq false
     end

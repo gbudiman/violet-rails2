@@ -5,27 +5,23 @@ module Violet
     extend ActiveSupport::Concern
 
     included do
-      def compute_current_weight!
-        current_weight = 0
-
-        equipments.each do |anatomy, equipment|
-          if equipment[:callbacks_for_weight].is_a?(Array)
-            equipment[:callbacks_for_weight].each do |callback|
-              current_weight += callback.call
-            end
-          else
-            current_weight += equipment[:weight]
-          end
-        end
-
-        resources.weight.current = current_weight
-      end
-
       def anatomies_holding(target)
         equipments.select do |anatomy, eq|
           eq[:props].map(&:to_sym).include?(target)
         end.to_h.keys
       end
+    end
+
+    def compute_current_weight!
+      current_weight = 0
+
+      equipments.each do |anatomy, equipment|
+        current_weight += equipment.execute_callback(:weight_reduction) do 
+          equipment[:weight]
+        end
+      end
+      
+      resources.weight = current_weight
     end
   end
 end

@@ -5,7 +5,9 @@ module Violet
     class Limit
       include Concerns::Stateable
       SKILLS = [:limit_mechanics, :limit_redux, :limit_steel_lung]
-      EFFECTS = []
+      cattr_reader :effects do
+        %i[]
+      end
 
       def initialize(state)
         super

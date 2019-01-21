@@ -19,6 +19,14 @@ module Concerns
     end
 
     module Queryable
+      def capacity
+        self[:capacity]
+      end
+
+      def capacity=(value)
+        self[:capacity] = value
+      end
+
       def auxes
         self.select { |k, v| k != :current }
       end

@@ -16,4 +16,8 @@ class State
     @anatomies = {}.extend(Concerns::Anatomiable).import!(h[:anatomies])
     @equipments = {}.extend(Concerns::Equippable).import!(h[:equipments])
   end
+
+  def push_effect(**kwargs)
+    @effects.push(caller_locations(1, 1)[0].label.split(/\s/).last, kwargs)
+  end
 end

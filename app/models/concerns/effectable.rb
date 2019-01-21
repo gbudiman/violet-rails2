@@ -5,7 +5,7 @@ module Concerns
     def self.extended(base)
       base.class.include Violet
       base.submodules_of(:skills).each do |school|
-        base.class_of(:skills, school)::EFFECTS.each do |effect|
+        base.class_of(:skills, school)::effects.each do |effect|
           key = effect.to_sym
 
           define_method(key) do
@@ -25,6 +25,21 @@ module Concerns
 
     def inactives
       self.select { |k, v| !v.active? }
+    end
+
+    def push(name, **kwargs)
+      self[name] ||= {}
+      self[name][:callback] = kwargs[:callback]
+
+      if kwargs[:stack].present?
+        if kwargs[:stack] == :permanent
+          self[name][:stack] = :permanent
+        else
+          self[name][:stack] += kwargs[:stack].to_i
+        end
+      elsif kwargs[:duration].present?
+        self[name][:duration] += kwargs[:duration]
+      end
     end
 
     def define_effect(h)
