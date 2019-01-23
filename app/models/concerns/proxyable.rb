@@ -18,8 +18,8 @@ module Concerns
         end
 
         define_method(:import!) do |h|
-          base.valid_attributes.each do |key|
-            self.send("#{key}=", h[key] || 0)
+          base.valid_attributes.each do |k|
+            self.send("#{k}=", h[k] || 0)
           end
 
           self

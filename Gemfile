@@ -32,6 +32,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 
 gem "recursive-open-struct"
 gem "rubocop-rails_config"
+gem "rubocop-rspec"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
