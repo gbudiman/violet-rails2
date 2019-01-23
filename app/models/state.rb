@@ -20,6 +20,11 @@ class State
   def push_effect(**kwargs)
     #@effects.push(caller_locations(1, 1)[0].label.split(/\s/).last, kwargs)
     arg = caller_locations(1, 1)[0].label.split(/\s/).last
-    @effects.send("#{arg}=", kwargs)
+
+    begin
+      @effects.send("#{arg}=", kwargs)
+    rescue ArgumentError => e
+      raise ArgumentError, "Pushing effect #{arg}: #{e.message}"
+    end
   end
 end

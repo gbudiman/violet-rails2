@@ -27,22 +27,6 @@ module Concerns
       self.select { |k, v| !v.active? }
     end
 
-    def push(raw_name, **kwargs)
-      name = raw_name.to_sym
-      self[name] ||= {}.extend(Concerns::EffectQueryable)
-      self[name][:callback] = kwargs[:callback]
-
-      if kwargs[:stack].present?
-        if kwargs[:stack] == :permanent
-          self[name][:stack] = :permanent
-        else
-          self[name][:stack] += kwargs[:stack].to_i
-        end
-      elsif kwargs[:duration].present?
-        self[name][:duration] += kwargs[:duration]
-      end
-    end
-
     def define_effect(h)
       if h[:stack].present? && h[:duration].present?
         raise ArgumentError, "Only either :stack or :duration qualifier may be present, not both"

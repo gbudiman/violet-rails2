@@ -56,6 +56,65 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
     end
   end
 
+  context "#+" do
+    context "on permanent effect" do
+      before { subject.efx = { stack: :permanent } }
+
+      it "remains permanent" do
+        subject.efx << { stack: 12 }
+        expect(subject.efx.stack).to eq(:permanent) 
+      end
+    end
+
+    context "on non-permanent stack" do
+      before { subject.efx = { stack: 15 } }
+
+      it "adds to stack" do
+        subject.efx << { stack: 12 }
+        expect(subject.efx.stack).to eq(27)
+      end
+    end
+
+    context "on suppressed stack" do
+      before do 
+        subject.efx = { stack: :permanent}
+        subject.efx.suppress!
+      end
+
+      it "remains suppressed" do
+        subject.efx << { stack: 12 }
+        expect(subject.efx.suppressed?).to eq true
+      end
+    end
+
+    context "on durational effect" do
+      before { subject.efx = { duration: 30 } }
+
+      it "adds to duration" do
+        subject.efx << { duration: 30 }
+        expect(subject.efx.duration).to eq(60)
+      end
+    end
+
+    context "on mismatched numerator" do
+      it "raises exception on :duration << :stack" do
+        subject.efx = { duration: 30 }
+
+        expect do 
+          subject.efx << { stack: 30 }
+        end.to raise_error(ArgumentError, 'Expected duration given stack')
+      end
+
+      it "raises exception on :stack << :duration" do
+        subject.efx = { stack: 30 }
+
+        expect do 
+          subject.efx << { duration: 30 }
+        end.to raise_error(ArgumentError, 'Expected stack given duration')
+      end
+    end
+  end
+
   context "#-" do
     context "on permanent effect" do
       it "should stay permanent" do

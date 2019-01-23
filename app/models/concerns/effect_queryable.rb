@@ -23,6 +23,30 @@ module Concerns
       self
     end
 
+    def <<(**kwargs)
+      if (self[:stack].present? && kwargs[:duration].present?)
+        raise ArgumentError, "Expected stack given duration"
+      elsif (self[:duration].present? && kwargs[:stack].present?)
+        raise ArgumentError, "Expected duration given stack"
+      end
+
+      if self[:stack].present? && self[:stack].is_a?(Integer)
+        self[:stack] += kwargs[:stack]
+      elsif self[:duration].present?
+        self[:duration] += kwargs[:duration]
+      end
+
+      self
+    end
+
+    def clear!
+      if self[:stack].present? && self[:stack] != :permanent
+        self[:stack] = 0
+      elsif self[:duration].present?
+        self[:duration] = 0
+      end
+    end
+
     def suppress!(val = true)
       if val
         if self[:stack].present?
@@ -39,6 +63,10 @@ module Concerns
       end
 
       self
+    end
+
+    def suppressed?
+      self[:stack].present? && self[:stack] == :suppressed
     end
 
     def tick!

@@ -91,10 +91,6 @@ RSpec.describe Agent, type: :model do
           expect(@agent.resources.weight!).to eq(
             equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
           )
-          #expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
-          #expect(@agent.resources.weight.current).to eq(
-          #  equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
-          #)
         end
       end
     end
