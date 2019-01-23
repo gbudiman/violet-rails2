@@ -48,7 +48,7 @@ RSpec.describe State, type: :model do
   let(:resources) { subject.resources }
   let(:effects) { subject.effects }
   let(:skills) { subject.skills }
-  let(:anatomies) { subject.anatomies}
+  let(:anatomies) { subject.anatomies }
 
   it { expect(subject.stats).to be_a_kind_of(Hash) }
   it "expects stats to be initialized correctly" do
@@ -99,8 +99,8 @@ RSpec.describe State, type: :model do
       expect(anatomies.foot_main.ok?).to eq true
     end
 
-    it 'should raise error on invalid anatomy' do
-      expect{anatomies.random_limb}.to raise_error(Concerns::Anatomiable::InvalidAnatomy)
+    it "should raise error on invalid anatomy" do
+      expect { anatomies.random_limb }.to raise_error(Concerns::Anatomiable::InvalidAnatomy)
     end
   end
 end

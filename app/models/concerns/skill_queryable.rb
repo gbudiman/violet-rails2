@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns
   module SkillQueryable
     extend ActiveSupport::Concern

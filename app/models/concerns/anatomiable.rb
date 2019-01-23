@@ -33,7 +33,7 @@ module Concerns
     end
 
     def method_missing(m, *args)
-      requested_anatomy = m.to_s.gsub(/\=/, '')
+      requested_anatomy = m.to_s.gsub(/\=/, "")
       raise InvalidAnatomy, "Invalid Anatomy: #{requested_anatomy}"
     end
 

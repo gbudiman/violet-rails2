@@ -11,7 +11,7 @@ RSpec.describe Concerns::Equippable, type: :model do
         hand_main: { props: [:sword, :steel], weight: 20 },
         hand_off: { props: [:shield, :wooden], weight: 18 },
         arm_main: {},
-        slingback: { 
+        slingback: {
           props: [:slingback, :leather],
           weight: 1,
           contents: [
@@ -58,7 +58,7 @@ RSpec.describe Concerns::Equippable, type: :model do
           let(:query) { subject.holding(:steel, :leather) }
 
           it "is manipulatable" do
-            query.each { |k, v| v.weight *= 2}
+            query.each { |k, v| v.weight *= 2 }
             query.each do |k, v|
               expect(subject.send(k).weight).to eq(input[k][:weight] * 2)
             end
@@ -106,7 +106,7 @@ RSpec.describe Concerns::Equippable, type: :model do
       context "#holster!" do
         pending
       end
-      
+
       context "#equip" do
         pending
       end

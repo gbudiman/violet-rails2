@@ -24,9 +24,9 @@ module Concerns
     end
 
     def <<(**kwargs)
-      if (self[:stack].present? && kwargs[:duration].present?)
+      if self[:stack].present? && kwargs[:duration].present?
         raise ArgumentError, "Expected stack given duration"
-      elsif (self[:duration].present? && kwargs[:stack].present?)
+      elsif self[:duration].present? && kwargs[:stack].present?
         raise ArgumentError, "Expected duration given stack"
       end
 

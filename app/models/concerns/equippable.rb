@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Concerns
   module Equippable
     extend ActiveSupport
@@ -11,7 +13,7 @@ module Concerns
         define_method("#{anatomy}=") do |value|
           self[anatomy] = value.dup
           if anatomy.in?(Concerns::Weaponizable::VALID_WEAPONIZABLE)
-            self[anatomy].extend(EquipWeaponizable) 
+            self[anatomy].extend(EquipWeaponizable)
           else
             self[anatomy].extend(EquipQueryable)
           end
@@ -60,7 +62,7 @@ module Concerns
     end
 
     module EquipQueryable
-      def define! prop, values
+      def define!(prop, values)
         case prop
         when :props
           values.each do |value|
@@ -90,7 +92,7 @@ module Concerns
           return value[:block].call if value[:props].include?(prop)
         end
 
-        yield 
+        yield
       end
 
       def method_missing(m, *args)
@@ -143,10 +145,10 @@ module Concerns
       def holster!
       end
 
-      def equip! item
+      def equip!(item)
       end
 
-      def pickup! item
+      def pickup!(item)
       end
 
       def method_missing(m, *args)

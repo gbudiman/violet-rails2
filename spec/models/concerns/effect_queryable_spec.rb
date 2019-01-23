@@ -62,7 +62,7 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
 
       it "remains permanent" do
         subject.efx << { stack: 12 }
-        expect(subject.efx.stack).to eq(:permanent) 
+        expect(subject.efx.stack).to eq(:permanent)
       end
     end
 
@@ -76,8 +76,8 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
     end
 
     context "on suppressed stack" do
-      before do 
-        subject.efx = { stack: :permanent}
+      before do
+        subject.efx = { stack: :permanent }
         subject.efx.suppress!
       end
 
@@ -100,17 +100,17 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
       it "raises exception on :duration << :stack" do
         subject.efx = { duration: 30 }
 
-        expect do 
+        expect do
           subject.efx << { stack: 30 }
-        end.to raise_error(ArgumentError, 'Expected duration given stack')
+        end.to raise_error(ArgumentError, "Expected duration given stack")
       end
 
       it "raises exception on :stack << :duration" do
         subject.efx = { stack: 30 }
 
-        expect do 
+        expect do
           subject.efx << { duration: 30 }
-        end.to raise_error(ArgumentError, 'Expected stack given duration')
+        end.to raise_error(ArgumentError, "Expected stack given duration")
       end
     end
   end

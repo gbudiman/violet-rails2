@@ -5,7 +5,7 @@ module Concerns
     def self.extended(base)
       base.class.include Violet
       base.submodules_of(:skills).each do |school|
-        base.class_of(:skills, school)::effects.each do |effect|
+        base.class_of(:skills, school).effects.each do |effect|
           key = effect.to_sym
 
           define_method(key) do
