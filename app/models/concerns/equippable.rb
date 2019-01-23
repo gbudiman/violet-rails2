@@ -54,12 +54,6 @@ module Concerns
         !@target.nil? && @target.blank?
       end
 
-      # def callbacks(name)
-      #   ap "called with #{name}"
-      # end
-
-
-
       def method_missing(m, *args)
         @target.public_send(m, *args)
       end

@@ -27,8 +27,9 @@ module Concerns
       self.select { |k, v| !v.active? }
     end
 
-    def push(name, **kwargs)
-      self[name] ||= {}
+    def push(raw_name, **kwargs)
+      name = raw_name.to_sym
+      self[name] ||= {}.extend(Concerns::EffectQueryable)
       self[name][:callback] = kwargs[:callback]
 
       if kwargs[:stack].present?

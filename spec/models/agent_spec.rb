@@ -76,23 +76,27 @@ RSpec.describe Agent, type: :model do
         end
       end
 
-      # context "equipment checks" do
-      #   it "should indicate equipped status correctly" do
-      #     [:hand_main, :hand_off].each do |limb|
-      #       expect(@agent.equipments[limb].status).to eq(:equipped)
-      #     end
-      #   end
-      # end
+      context "equipment checks" do
+        it "should indicate equipped status correctly" do
+          expect(@agent.equipments.hand_main.sword?).to eq(true)
+          expect(@agent.equipments.hand_off.shield?).to eq(true)
+        end
+      end
 
-      # context "effect checks" do
-      #   it "should add effect from skills correctly" do
-      #     equipped = state[:equipments]
-      #     expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
-      #     expect(@agent.resources.weight.current).to eq(
-      #       equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
-      #     )
-      #   end
-      # end
+      context "effect checks" do
+        it "should add effect from skills correctly" do
+          equipped = state[:equipments]
+          expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
+          expect(@agent.effects.actives).to include(:shield_slinger)
+          expect(@agent.resources.weight!).to eq(
+            equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
+          )
+          #expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
+          #expect(@agent.resources.weight.current).to eq(
+          #  equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
+          #)
+        end
+      end
     end
   end
 end

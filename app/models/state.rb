@@ -18,6 +18,8 @@ class State
   end
 
   def push_effect(**kwargs)
-    @effects.push(caller_locations(1, 1)[0].label.split(/\s/).last, kwargs)
+    #@effects.push(caller_locations(1, 1)[0].label.split(/\s/).last, kwargs)
+    arg = caller_locations(1, 1)[0].label.split(/\s/).last
+    @effects.send("#{arg}=", kwargs)
   end
 end
