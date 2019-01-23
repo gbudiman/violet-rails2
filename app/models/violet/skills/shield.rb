@@ -3,25 +3,31 @@
 module Violet
   module Skills
     class Shield
-      include Concerns::Stateable
+      include Concerns::SkillQueryable
+
+      SKILLS = [:shield_slinger]
+
+      cattr_reader :effects do
+        %i[shield_slinger]
+      end
 
       def initialize(state)
         super
+      end
 
-        if skills.has?(:shield_slinger)
-          effects.shield_slinger = {
-            stack: :permanent,
-            callback: -> (agent) {
-              agent.anatomies_holding(:shield).each do |anatomy|
-                agent.equipments[anatomy].callbacks_for_weight ||= []
-                agent.equipments[anatomy].callbacks_for_weight.push(lambda {
-                  agent.equipments[anatomy].weight / 2
+      private
+
+        def shield_slinger
+          passive do
+            state.push_effect(stack: :permanent, callback: -> (agent) {
+              agent.equipments.holding(:shield).each do |anatomy, equipment|
+                equipment.callbacks(:shield_slinger, :weight_reduction, lambda {
+                  equipment.weight /= 2
                 })
               end
-            }
-          }
+            })
+          end
         end
-      end
     end
   end
 end

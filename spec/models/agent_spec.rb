@@ -12,35 +12,35 @@ RSpec.describe Agent, type: :model do
         int:  1,
         vit: 77,
         fai: 16,
-        hp: 1000,
         limit: 32,
       },
       resources: {
-        hp: { current: 500 },
-        limit: { current: 8 },
+        hp: 500,
+        limit: 8,
       },
       skills: {
-        limit_break_mechanics: true,
-        limit_break_redux: true,
-        limit_break_steel_lung: true,
+        limit_mechanics: true,
+        limit_redux: true,
+        limit_steel_lung: true,
         shield_slinger: true,
       },
       effects: {},
-      anatomy: {
+      anatomies: {
         hand_main: :ok,
         hand_off: :ok,
         arm_main: :ok,
         arm_off: :ok,
-        feet: :ok,
+        foot_main: :ok,
+        foot_off: :ok,
         head: :ok,
         torso: :ok,
         hip: :ok,
+        slingback: :ok
       },
       equipments: {
         hand_main: { props: [:sword], weight: 20 },
         hand_off: { props: [:shield], weight: 18 },
       },
-      inventories: {},
     }
   end
 
@@ -61,7 +61,7 @@ RSpec.describe Agent, type: :model do
 
     it "should automatically convert current_state to OpenStruct" do
       agent = Agent.find(@agent.id)
-      expect(agent.stats.str).to be_a_kind_of(Integer)
+      expect(agent.stats.str!).to be_a_kind_of(Integer)
     end
 
     context "preprocessing" do
@@ -70,17 +70,16 @@ RSpec.describe Agent, type: :model do
       end
 
       context "secondary stats" do
-        it "should be derived correctly" do
-          expect(@agent.resources.limit.max).to eq 24
-          expect(@agent.resources.weight.max).to be_a_kind_of(Float)
+        it "is derived correctly" do
+          expect(@agent.resources.weight.capacity).to be_a_kind_of(Float)
+          expect(@agent.resources.weight!).to eq(29)
         end
       end
 
       context "equipment checks" do
         it "should indicate equipped status correctly" do
-          [:hand_main, :hand_off].each do |limb|
-            expect(@agent.equipments[limb].status).to eq(:equipped)
-          end
+          expect(@agent.equipments.hand_main.sword?).to eq(true)
+          expect(@agent.equipments.hand_off.shield?).to eq(true)
         end
       end
 
@@ -88,7 +87,8 @@ RSpec.describe Agent, type: :model do
         it "should add effect from skills correctly" do
           equipped = state[:equipments]
           expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
-          expect(@agent.resources.weight.current).to eq(
+          expect(@agent.effects.actives).to include(:shield_slinger)
+          expect(@agent.resources.weight!).to eq(
             equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
           )
         end
