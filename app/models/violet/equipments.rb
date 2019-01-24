@@ -4,14 +4,6 @@ module Violet
   module Equipments
     extend ActiveSupport::Concern
 
-    included do
-      def anatomies_holding(target)
-        equipments.select do |anatomy, eq|
-          eq[:props].map(&:to_sym).include?(target)
-        end.to_h.keys
-      end
-    end
-
     def compute_current_weight!
       current_weight = 0
 

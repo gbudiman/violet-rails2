@@ -2,75 +2,20 @@
 
 module Concerns
   module EffectQueryable
-    def active?
-      if self[:stack].present?
-        return true if self[:stack].is_a?(Symbol) && self[:stack] == :permanent
-        return true if self[:stack].is_a?(Integer) && self[:stack] > 0
-      elsif self[:duration].present?
-        return true if self[:duration] > 0
-      end
-
-      false
+    def stack?
+      self[:stack].present?
     end
 
-    def -(arg)
-      if self[:stack].present? && self[:stack].is_a?(Integer)
-        self[:stack] = [0, self[:stack] - arg].max
-      elsif self[:duration].present?
-        self[:duration] = [0, self[:duration] - arg].max
-      end
-
-      self
+    def stack_numerical?
+      stack? && stack.is_a?(Integer)
     end
 
-    def <<(**kwargs)
-      if self[:stack].present? && kwargs[:duration].present?
-        raise ArgumentError, "Expected stack given duration"
-      elsif self[:duration].present? && kwargs[:stack].present?
-        raise ArgumentError, "Expected duration given stack"
-      end
-
-      if self[:stack].present? && self[:stack].is_a?(Integer)
-        self[:stack] += kwargs[:stack]
-      elsif self[:duration].present?
-        self[:duration] += kwargs[:duration]
-      end
-
-      self
+    def duration?
+      self[:duration].present?
     end
 
-    def clear!
-      if self[:stack].present? && self[:stack] != :permanent
-        self[:stack] = 0
-      elsif self[:duration].present?
-        self[:duration] = 0
-      end
-    end
-
-    def suppress!(val = true)
-      if val
-        if self[:stack].present?
-          self[:stack] = if self[:stack].is_a?(Integer)
-            0
-          elsif self[:stack].is_a?(Symbol)
-            :suppressed
-          end
-        elsif self[:duration].present?
-          self[:duration] = 0
-        end
-      else
-        self[:stack] = :permanent if self[:stack] == :suppressed
-      end
-
-      self
-    end
-
-    def suppressed?
-      self[:stack].present? && self[:stack] == :suppressed
-    end
-
-    def tick!
-      self - 1
+    def finite_stack?
+      stack? && self[:stack].is_a?(Integer)
     end
 
     def duration
@@ -79,6 +24,70 @@ module Concerns
 
     def stack
       self[:stack]
+    end
+
+    def permanent?
+      stack? && stack.is_a?(Symbol) && stack == :permanent
+    end
+
+    def suppressed?
+      stack? && stack.is_a?(Symbol) && stack == :suppressed
+    end
+
+    def active?
+      (stack? && (permanent? || stack > 0)) || (duration? && duration > 0)
+    end
+
+    def -(arg)
+      if stack_numerical?
+        self[:stack] = [0, stack - arg].max
+      elsif duration?
+        self[:duration] = [0, duration - arg].max
+      end
+
+      self
+    end
+
+    def <<(**kwargs)
+      if stack? && kwargs[:duration].present?
+        raise ArgumentError, "Expected stack given duration"
+      elsif duration? && kwargs[:stack].present?
+        raise ArgumentError, "Expected duration given stack"
+      end
+
+      if stack_numerical?
+        self[:stack] += kwargs[:stack]
+      elsif duration?
+        self[:duration] += kwargs[:duration]
+      end
+
+      self
+    end
+
+    def clear!
+      if stack_numerical?
+        self[:stack] = 0
+      elsif duration?
+        self[:duration] = 0
+      end
+    end
+
+    def suppress!(val = true)
+      if val
+        if stack?
+          self[:stack] = stack_numerical? ? 0 : :suppressed
+        elsif duration?
+          self[:duration] = 0
+        end
+      else
+        self[:stack] = :permanent if suppressed?
+      end
+
+      self
+    end
+
+    def tick!
+      self - 1
     end
   end
 end

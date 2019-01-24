@@ -4,7 +4,6 @@ module Violet
   module Effects
     class Callback
       include Concerns::Stateable
-      include Violet::Equipments
 
       def initialize(state)
         super
