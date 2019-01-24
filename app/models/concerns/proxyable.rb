@@ -27,15 +27,9 @@ module Concerns
       end
     end
 
-    class ExtensionProxy
-      attr_reader :field_accessor
-      delegate :aux, :auxes, :to_i, :capacity, :capacity=, to: :field_accessor
-
-      def initialize(ancestor, attribute)
-        @ancestor = ancestor
-        @attribute = attribute
-        @field_accessor = @ancestor[@attribute]
-      end
+    class ExtensionProxy < BaseProxy
+      attr_accessor :field_accessor
+      delegate :aux, :auxes, :to_i, to: :field_accessor
 
       def method_missing(m, *args)
         if m.to_s.last == "="

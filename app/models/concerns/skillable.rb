@@ -61,19 +61,13 @@ module Concerns
     end
   end
 
-  class ExtensionProxy
-    def initialize(ancestor, attribute)
-      @ancestor = ancestor
-      @attribute = attribute
-      @target = @ancestor[@attribute]
-    end
-
+  class ExtensionProxy < BaseProxy
     def disabled?
-      @target == :disabled
+      @field_accessor == :disabled
     end
 
     def available?
-      @target == true
+      @field_accessor == true
     end
 
     def set!(val)

@@ -19,14 +19,6 @@ module Concerns
     end
 
     module Queryable
-      def capacity
-        self[:capacity]
-      end
-
-      def capacity=(value)
-        self[:capacity] = value
-      end
-
       def auxes
         self.select { |k, v| k != :current }
       end
@@ -34,6 +26,8 @@ module Concerns
       def to_i
         self[:current] || 0
       end
+
+      alias_method :aux, :auxes
     end
   end
 end

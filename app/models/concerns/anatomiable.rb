@@ -43,35 +43,29 @@ module Concerns
     class InvalidState < StandardError
     end
 
-    class AnatomyProxy
-      attr_reader :anatomy, :ancestor
-      def initialize(ancestor, anatomy)
-        @anatomy = anatomy
-        @ancestor = ancestor
-      end
-
+    class AnatomyProxy < BaseProxy
       def maim!
-        @ancestor[@anatomy] = :maimed
+        @ancestor[@attribute] = :maimed
       end
 
       def sunder!
-        @ancestor[@anatomy] = :sundered
+        @ancestor[@attribute] = :sundered
       end
 
       def pristine!
-        @ancestor[@anatomy] = :ok unless @ancestor.send("#{@anatomy}!") == :not_available
+        @ancestor[@attribute] = :ok unless @ancestor.send("#{@attribute}!") == :not_available
       end
 
       def repair!
-        @ancestor[@anatomy] = case @ancestor.send("#{@anatomy}!")
-                              when :sundered then :maimed
-                              when :maimed then :ok
-                              when :ok then :ok
+        @ancestor[@attribute] = case @ancestor.send("#{@attribute}!")
+                                when :sundered then :maimed
+                                when :maimed then :ok
+                                when :ok then :ok
         end
       end
 
       def ok?
-        @ancestor.send("#{@anatomy}!") == :ok
+        @ancestor.send("#{@attribute}!") == :ok
       end
     end
   end
