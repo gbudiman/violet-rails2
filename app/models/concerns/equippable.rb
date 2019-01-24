@@ -41,118 +41,17 @@ module Concerns
       end
     end
 
-    class EquippableProxy
-      def initialize(ancestor, attribute)
-        @ancestor = ancestor
-        @attribute = attribute
-        @target = @ancestor[@attribute]
-      end
-
+    class EquippableProxy < BaseProxy
       def available?
-        @target.is_a?(Hash)
+        @field_accessor.is_a?(Hash)
       end
 
       def equippable?
-        !@target.nil? && @target.blank?
+        !@field_accessor.nil? && @field_accessor.blank?
       end
 
       def method_missing(m, *args)
-        @target.public_send(m, *args)
-      end
-    end
-
-    module EquipQueryable
-      def define!(prop, values)
-        case prop
-        when :props
-          values.each do |value|
-            define_singleton_method("#{value}?") { true }
-          end
-        when :weight
-          self[prop] = values
-          define_singleton_method(prop) { self[prop] }
-          define_singleton_method("#{prop}=") { |v| self[prop] = v }
-        end
-      end
-
-      def holding_something?
-        self.key?(:props) && self.key?(:weight)
-      end
-
-      def callbacks(name, prop, block)
-        self[:callbacks] ||= {}
-        self[:callbacks][name.to_sym] = {
-          props: prop.is_a?(Array) ? prop : [prop],
-          block: block
-        }
-      end
-
-      def execute_callback(prop)
-        self[:callbacks]&.each do |key, value|
-          return value[:block].call if value[:props].include?(prop)
-        end
-
-        yield
-      end
-
-      def method_missing(m, *args)
-        false
-      end
-    end
-
-    module EquipWeaponizable
-      include EquipQueryable
-
-      def usable?
-        !sundered? && !maimed?
-      end
-
-      def maim!
-        self[:maimed] = true
-      end
-
-      def maimed?
-        self[:maimed] == true
-      end
-
-      def sunder!
-        drop!
-        self[:sundered] = true
-      end
-
-      def sundered?
-        self[:sundered] == true
-      end
-
-      def pristine!
-        self.delete(:maimed)
-        self.delete(:sundered)
-      end
-
-      def repair!
-      end
-
-      def disarm!(forced: true)
-        cached = self.dup
-        self.clear
-        cached
-      end
-
-      def drop!
-        disarm!(forced: false)
-      end
-
-      def holster!
-      end
-
-      def equip!(item)
-      end
-
-      def pickup!(item)
-      end
-
-      def method_missing(m, *args)
-        false
+        @field_accessor.public_send(m, *args)
       end
     end
   end
