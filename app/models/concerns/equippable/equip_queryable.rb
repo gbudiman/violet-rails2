@@ -36,7 +36,7 @@ module Concerns
         yield
       end
 
-      def method_missing(_m, *_args)
+      def method_missing(_meth, *_args)
         false
       end
     end

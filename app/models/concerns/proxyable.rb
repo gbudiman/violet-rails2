@@ -9,14 +9,8 @@ module Concerns
           self[key][base.accessor] = value
         end
 
-        define_method("#{key}!") do
-          self[key].to_i
-        end
-
-        define_method(key.to_s) do
-          ExtensionProxy.new(self, key)
-        end
-
+        define_method("#{key}!") { self[key].to_i }
+        define_method(key.to_s) { ExtensionProxy.new(self, key) }
         define_method(:import!) do |h|
           base.valid_attributes.each do |k|
             send("#{k}=", h[k] || 0)
@@ -31,11 +25,11 @@ module Concerns
       attr_accessor :field_accessor
       delegate :aux, :auxes, :to_i, to: :field_accessor
 
-      def method_missing(m, *args)
-        if m.to_s.last == '='
-          @ancestor[@attribute][(m[0..-2]).to_s.to_sym] = args.first
+      def method_missing(meth, *args)
+        if meth.to_s.last == '='
+          @ancestor[@attribute][(meth[0..-2]).to_s.to_sym] = args.first
         else
-          @ancestor[@attribute][m]
+          @ancestor[@attribute][meth]
         end
       end
     end

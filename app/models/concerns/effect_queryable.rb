@@ -35,25 +35,22 @@ module Concerns
     end
 
     def active?
-      (stack? && (permanent? || stack > 0)) || (duration? && duration > 0)
+      (stack? && (permanent? || stack.positive?)) || (duration? && duration.positive?)
     end
 
-    def -(arg)
+    def -(other)
       if stack_numerical?
-        self[:stack] = [0, stack - arg].max
+        self[:stack] = [0, stack - other].max
       elsif duration?
-        self[:duration] = [0, duration - arg].max
+        self[:duration] = [0, duration - other].max
       end
 
       self
     end
 
     def <<(**kwargs)
-      if stack? && kwargs[:duration].present?
-        raise ArgumentError, 'Expected stack given duration'
-      elsif duration? && kwargs[:stack].present?
-        raise ArgumentError, 'Expected duration given stack'
-      end
+      raise ArgumentError, 'Expected stack given duration' if stack? && kwargs[:duration].present?
+      raise ArgumentError, 'Expected duration given stack' if duration? && kwargs[:stack].present?
 
       if stack_numerical?
         self[:stack] += kwargs[:stack]
@@ -79,8 +76,8 @@ module Concerns
         elsif duration?
           self[:duration] = 0
         end
-      else
-        self[:stack] = :permanent if suppressed?
+      elsif suppressed?
+        self[:stack] = :permanent
       end
 
       self

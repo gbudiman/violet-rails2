@@ -33,7 +33,7 @@ module Concerns
 
       def repair!; end
 
-      def disarm!(forced: true)
+      def disarm!(forced: true) # rubocop:disable Lint/UnusedMethodArgument
         cached = dup
         clear
         cached
@@ -49,7 +49,7 @@ module Concerns
 
       def pickup!(item); end
 
-      def method_missing(_m, *_args)
+      def method_missing(_meth, *_args)
         false
       end
     end

@@ -45,8 +45,8 @@ module Concerns
         !@field_accessor.nil? && @field_accessor.blank?
       end
 
-      def method_missing(m, *args)
-        @field_accessor.public_send(m, *args)
+      def method_missing(meth, *args)
+        @field_accessor.public_send(meth, *args)
       end
     end
   end

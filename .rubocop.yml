@@ -7,16 +7,25 @@ AllCops:
     - 'db/**/*'
     - 'test/**'
 
+Metrics/AbcSize:
+  Max: 24
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
 
+Metrics/CyclomaticComplexity:
+  Max: 8
+  
 Metrics/LineLength:
   Max: 120
 
 Metrics/MethodLength:
   Max: 16
-  
+
+Metrics/PerceivedComplexity:
+  Max: 12
+
 RSpec/ExampleLength:
   Max: 32
 
@@ -33,4 +42,10 @@ RSpec/NestedGroups:
   Enabled: false
 
 Style/Documentation:
+  Enabled: false
+
+Style/MethodMissingSuper:
+  Enabled: false
+
+Style/MissingRespondToMissing:
   Enabled: false
