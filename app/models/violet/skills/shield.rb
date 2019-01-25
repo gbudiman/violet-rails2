@@ -5,7 +5,7 @@ module Violet
     class Shield
       include Concerns::SkillQueryable
 
-      SKILLS = [:shield_slinger]
+      SKILLS = [:shield_slinger].freeze
 
       cattr_reader :effects do
         %i[shield_slinger]
@@ -17,17 +17,17 @@ module Violet
 
       private
 
-        def shield_slinger
-          passive do
-            state.push_effect(stack: :permanent, callback: -> (agent) {
-              agent.equipments.holding(:shield).each do |anatomy, equipment|
-                equipment.callbacks(:shield_slinger, :weight_reduction, lambda {
-                  equipment.weight /= 2
-                })
-              end
-            })
-          end
+      def shield_slinger
+        passive do
+          state.push_effect(stack: :permanent, callback: lambda { |agent|
+            agent.equipments.holding(:shield).each do |_anatomy, equipment|
+              equipment.callbacks(:shield_slinger, :weight_reduction, lambda {
+                equipment.weight /= 2
+              })
+            end
+          })
         end
+      end
     end
   end
 end

@@ -5,13 +5,14 @@ module Concerns
     VALID_ANATOMIES = [
       :hand_main, :hand_off, # weapon slots
       :arm_main, :arm_off, :foot_main, :foot_off, :head, :torso, :hip, :slingback
-    ]
-    VALID_STATE = [:not_available, :ok, :maimed, :sundered]
+    ].freeze
+    VALID_STATE = %i[not_available ok maimed sundered].freeze
 
     VALID_ANATOMIES.each do |anatomy|
       define_method("#{anatomy}=") do |value|
         value = value.to_sym
         raise InvalidState, "Invalid State: #{value} on Anatomy: #{anatomy}" unless VALID_STATE.include?(value)
+
         self[anatomy] = value
       end
 
@@ -19,21 +20,21 @@ module Concerns
         self[anatomy] || :not_available
       end
 
-      define_method("#{anatomy}") do
+      define_method(anatomy.to_s) do
         AnatomyProxy.new(self, anatomy)
       end
     end
 
     def import!(h)
       h.each do |key, value|
-        self.send("#{key}=", value)
+        send("#{key}=", value)
       end
 
       self
     end
 
-    def method_missing(m, *args)
-      requested_anatomy = m.to_s.gsub(/\=/, "")
+    def method_missing(m, *_args)
+      requested_anatomy = m.to_s.delete('=')
       raise InvalidAnatomy, "Invalid Anatomy: #{requested_anatomy}"
     end
 

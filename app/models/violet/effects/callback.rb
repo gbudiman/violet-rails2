@@ -8,7 +8,7 @@ module Violet
       def initialize(state)
         super
 
-        effects.each do |effect, values|
+        effects.each do |_effect, values|
           values[:callback].call(self) if values[:callback].present?
         end
       end

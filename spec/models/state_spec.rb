@@ -1,28 +1,30 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe State, type: :model do
+  subject { State.new(state) }
+
   let(:state) do
     {
       stats: {
         str: 32,
         agi: 50,
         dex: 26,
-        int:  1,
+        int: 1,
         vit: 77,
         fai: 16,
-        limit: 32,
+        limit: 32
       },
       resources: {
         hp: 500,
-        limit: 8,
+        limit: 8
       },
       skills: {
         limit_mechanics: true,
         limit_redux: true,
         limit_steel_lung: true,
-        shield_slinger: true,
+        shield_slinger: true
       },
       effects: {},
       anatomies: {
@@ -34,16 +36,15 @@ RSpec.describe State, type: :model do
         foot_off: :ok,
         torso: :ok,
         hip: :ok,
-        slingback: :ok,
+        slingback: :ok
       },
       equipments: {
         hand_main: { props: [:sword], weight: 20 },
-        hand_off: { props: [:shield], weight: 18 },
-      },
+        hand_off: { props: [:shield], weight: 18 }
+      }
     }
   end
 
-  subject { State.new(state) }
   let(:stats) { subject.stats }
   let(:resources) { subject.resources }
   let(:effects) { subject.effects }
@@ -51,15 +52,15 @@ RSpec.describe State, type: :model do
   let(:anatomies) { subject.anatomies }
 
   it { expect(subject.stats).to be_a_kind_of(Hash) }
-  it "expects stats to be initialized correctly" do
-    [:str, :agi, :dex, :int, :vit, :fai, :limit, :trance, :orb,
-     :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
+  it 'expects stats to be initialized correctly' do
+    %i[str agi dex int vit fai limit trance orb
+       impulse malice mana soul gestalt prayer].each do |key|
       expect(stats.send("#{key}!")).to eq(state[:stats][key] || 0)
       expect(stats.send(key).send(:base)).to eq(state[:stats][key] || 0)
       expect(stats.send(key).send(:aux)).to eq(0)
     end
   end
-  it "expects stats auxiliary to be get/set correctly" do
+  it 'expects stats auxiliary to be get/set correctly' do
     stats.str.visceral_strength = 32
     expect(stats.str!).to eq(stats.str.visceral_strength + state[:stats][:str])
     expect(stats.str.base).to eq(state[:stats][:str])
@@ -68,9 +69,9 @@ RSpec.describe State, type: :model do
       visceral_strength: stats.str.visceral_strength
     )
   end
-  it "expects resources to be initialized correctly" do
-    [:hp, :weight, :limit, :trance, :orb,
-     :impulse, :malice, :mana, :soul, :gestalt, :prayer].each do |key|
+  it 'expects resources to be initialized correctly' do
+    %i[hp weight limit trance orb
+       impulse malice mana soul gestalt prayer].each do |key|
       expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
       expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
 
@@ -80,37 +81,37 @@ RSpec.describe State, type: :model do
     end
   end
 
-  context "skills" do
-    it "is correctly queryable" do
+  context 'skills' do
+    it 'is correctly queryable' do
       expect(skills.has?(:shield_slinger)).to eq true
       expect(skills.has?(:random_dne)).to eq false
     end
   end
 
-  context "effects" do
-    it "should be correctly accessible" do
+  context 'effects' do
+    it 'is correctly accessible' do
       effects.shield_slinger = { stack: :permanent }
       expect(effects.shield_slinger.active?).to eq true
     end
 
-    context "re-entrancy" do
+    context 're-entrancy' do
       before do
         effects.shield_slinger = { stack: :permanent }
       end
 
-      it "should append new effect correctly" do
+      it 'appends new effect correctly' do
         expect(subject.effects.shield_slinger).to receive(:<<).and_call_original
         Violet::Skills::Shield.new(subject)
       end
     end
   end
 
-  context "anatomies" do
-    it "should be correctly available" do
+  context 'anatomies' do
+    it 'is correctly available' do
       expect(anatomies.foot_main.ok?).to eq true
     end
 
-    it "should raise error on invalid anatomy" do
+    it 'raises error on invalid anatomy' do
       expect { anatomies.random_limb }.to raise_error(Concerns::Anatomiable::InvalidAnatomy)
     end
   end

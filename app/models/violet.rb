@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module Violet
-  MODULES = [:anatomies, :skills, :effects, :stats, :resources]
+  MODULES = %i[anatomies skills effects stats resources].freeze
 
-  ANATOMIES = [:arm, :feet, :hand, :head, :hip, :torso]
-  SKILLS = [
-    :stance, :limit, :shield
-  ]
-  EFFECTS = [:callback]
-  STATS = []
-  RESOURCES = [:weight]
+  ANATOMIES = %i[arm feet hand head hip torso].freeze
+  SKILLS = %i[
+    stance limit shield
+  ].freeze
+  EFFECTS = [:callback].freeze
+  STATS = [].freeze
+  RESOURCES = [:weight].freeze
 
   extend ActiveSupport::Concern
 

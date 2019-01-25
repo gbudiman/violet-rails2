@@ -5,7 +5,7 @@ class Battlefield < ApplicationRecord
   has_many :agents, dependent: :destroy
   validates :seed, presence: true
 
-private
+  private
 
   def generate_seed
     self.seed = Random.new.seed % 2**63

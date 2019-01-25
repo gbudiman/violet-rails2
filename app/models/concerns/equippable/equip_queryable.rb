@@ -17,7 +17,7 @@ module Concerns
       end
 
       def holding_something?
-        self.key?(:props) && self.key?(:weight)
+        key?(:props) && key?(:weight)
       end
 
       def callbacks(name, prop, block)
@@ -29,14 +29,14 @@ module Concerns
       end
 
       def execute_callback(prop)
-        self[:callbacks]&.each do |key, value|
+        self[:callbacks]&.each do |_key, value|
           return value[:block].call if value[:props].include?(prop)
         end
 
         yield
       end
 
-      def method_missing(m, *args)
+      def method_missing(_m, *_args)
         false
       end
     end

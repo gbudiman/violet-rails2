@@ -20,18 +20,18 @@ module Concerns
     end
 
     def actives
-      self.select { |k, v| v.active? }
+      select { |_k, v| v.active? }
     end
 
     def inactives
-      self.select { |k, v| !v.active? }
+      reject { |_k, v| v.active? }
     end
 
     def define_effect(h)
       if h[:stack].present? && h[:duration].present?
-        raise ArgumentError, "Only either :stack or :duration qualifier may be present, not both"
+        raise ArgumentError, 'Only either :stack or :duration qualifier may be present, not both'
       elsif h[:stack].blank? && h[:duration].blank?
-        raise ArgumentError, "Either :stack or :duration must be specified"
+        raise ArgumentError, 'Either :stack or :duration must be specified'
       end
 
       h
@@ -39,7 +39,7 @@ module Concerns
 
     def import!(h)
       h.each do |k, v|
-        self.send(k, v)
+        send(k, v)
       end
 
       self

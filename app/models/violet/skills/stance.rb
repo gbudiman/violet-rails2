@@ -4,7 +4,7 @@ module Violet
   module Skills
     class Stance
       include Concerns::Stateable
-      SKILLS = []
+      SKILLS = [].freeze
       cattr_reader :effects do
         %i[]
       end

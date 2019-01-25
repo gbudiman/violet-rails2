@@ -20,14 +20,14 @@ module Concerns
 
     module Queryable
       def auxes
-        self.select { |k, v| k != :current }
+        reject { |k, _v| k == :current }
       end
 
       def to_i
         self[:current] || 0
       end
 
-      alias_method :aux, :auxes
+      alias aux auxes
     end
   end
 end

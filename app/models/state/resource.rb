@@ -7,6 +7,6 @@ class State::Resource
   include Concerns::Attributable
   def initialize(**kwargs)
     super(VALID_ATTRIBUTES, BASE_ACCESSOR, kwargs)
-    self.extend(Concerns::AttributeCallable)
+    extend(Concerns::AttributeCallable)
   end
 end

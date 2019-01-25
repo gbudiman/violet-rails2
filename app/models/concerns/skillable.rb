@@ -39,16 +39,15 @@ module Concerns
     end
 
     def has?(skill, any_state: false)
-      return false unless has_key?(skill)
-      proxied_skill = self.send("#{skill}")
+      return false unless key?(skill)
+
+      proxied_skill = send(skill.to_s)
       (proxied_skill.available? || (any_state && proxied_skill.disabled?)) == true
     end
 
     def set!(state, *skills)
       skills.flatten.each do |skill|
-        if has?(skill, any_state: true)
-          self.send(skill).set!(state)
-        end
+        send(skill).set!(state) if has?(skill, any_state: true)
       end
     end
 

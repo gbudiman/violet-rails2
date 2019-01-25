@@ -6,7 +6,7 @@ class Agent < ApplicationRecord
   belongs_to :battlefield
   after_initialize :copy_initial_state, :generate_uuid
   after_find :load_state
-  after_commit :load_state, on: [:create, :update]
+  after_commit :load_state, on: %i[create update]
 
   delegate :anatomies, to: :workable_state
   delegate :effects, to: :workable_state
@@ -28,11 +28,12 @@ class Agent < ApplicationRecord
     end
   end
 
-private
+  private
+
   attr_accessor :workable_state
 
   def copy_initial_state
-    self.current_state = self.initial_state
+    self.current_state = initial_state
   end
 
   def generate_uuid
@@ -40,6 +41,6 @@ private
   end
 
   def load_state
-    @workable_state = State.new(self.current_state.deep_symbolize_keys)
+    @workable_state = State.new(current_state.deep_symbolize_keys)
   end
 end

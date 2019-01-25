@@ -13,13 +13,13 @@ module Concerns
           self[key].to_i
         end
 
-        define_method("#{key}") do
+        define_method(key.to_s) do
           ExtensionProxy.new(self, key)
         end
 
         define_method(:import!) do |h|
           base.valid_attributes.each do |k|
-            self.send("#{k}=", h[k] || 0)
+            send("#{k}=", h[k] || 0)
           end
 
           self
@@ -32,8 +32,8 @@ module Concerns
       delegate :aux, :auxes, :to_i, to: :field_accessor
 
       def method_missing(m, *args)
-        if m.to_s.last == "="
-          @ancestor[@attribute]["#{m[0..-2]}".to_sym] = args.first
+        if m.to_s.last == '='
+          @ancestor[@attribute][(m[0..-2]).to_s.to_sym] = args.first
         else
           @ancestor[@attribute][m]
         end

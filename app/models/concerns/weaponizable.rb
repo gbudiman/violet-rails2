@@ -2,13 +2,13 @@
 
 module Concerns
   module Weaponizable
-    VALID_WEAPONIZABLE = [:hand_main, :hand_off]
+    VALID_WEAPONIZABLE = %i[hand_main hand_off].freeze
     extend ActiveSupport::Concern
     include Concerns::Stateable
 
     included do
       def equip_equipments
-        equipments.each do |intended_anatomy, equipment|
+        equipments.each do |intended_anatomy, _equipment|
           case anatomies[intended_anatomy].to_sym
           when :ok
             equipments[intended_anatomy].status = :equipped

@@ -7,7 +7,7 @@ module Violet
     def compute_current_weight!
       current_weight = 0
 
-      equipments.each do |anatomy, equipment|
+      equipments.each do |_anatomy, equipment|
         current_weight += equipment.execute_callback(:weight_reduction) do
           equipment[:weight]
         end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 module EffectTestable
-  def self.extended(base)
-    [:permanent_effect, :active_effect, :active_duration, :expired_effect, :expired_duration].each do |key|
+  def self.extended(_base)
+    %i[permanent_effect active_effect active_duration expired_effect expired_duration].each do |key|
       define_method("#{key}=") do |h|
         self[key] = define_effect(h).extend(Concerns::EffectQueryable)
       end
@@ -25,9 +25,9 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
     subject.expired_duration = { duration: 0 }
   end
 
-  it "should list #actives and #inactives correctly" do
-    active_effects = [:permanent_effect, :active_effect, :active_duration]
-    inactive_effects = [:expired_effect, :expired_duration]
+  it 'lists #actives and #inactives correctly' do
+    active_effects = %i[permanent_effect active_effect active_duration]
+    inactive_effects = %i[expired_effect expired_duration]
     expect(subject.actives.keys).to contain_exactly(*active_effects)
     expect(subject.inactives.keys).to contain_exactly(*inactive_effects)
 

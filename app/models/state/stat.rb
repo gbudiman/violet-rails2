@@ -7,6 +7,6 @@ class State::Stat
   include Concerns::Attributable
   def initialize(**kwargs)
     super(VALID_ATTRIBUTES, BASE_ACCESSOR, kwargs)
-    self.extend(Concerns::AttributeSummable)
+    extend(Concerns::AttributeSummable)
   end
 end

@@ -27,16 +27,15 @@ module Concerns
       end
 
       def pristine!
-        self.delete(:maimed)
-        self.delete(:sundered)
+        delete(:maimed)
+        delete(:sundered)
       end
 
-      def repair!
-      end
+      def repair!; end
 
       def disarm!(forced: true)
-        cached = self.dup
-        self.clear
+        cached = dup
+        clear
         cached
       end
 
@@ -44,16 +43,13 @@ module Concerns
         disarm!(forced: false)
       end
 
-      def holster!
-      end
+      def holster!; end
 
-      def equip!(item)
-      end
+      def equip!(item); end
 
-      def pickup!(item)
-      end
+      def pickup!(item); end
 
-      def method_missing(m, *args)
+      def method_missing(_m, *_args)
         false
       end
     end

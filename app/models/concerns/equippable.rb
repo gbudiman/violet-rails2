@@ -4,8 +4,8 @@ module Concerns
   module Equippable
     extend ActiveSupport
 
-    def self.extended(base)
-      (Concerns::Anatomiable::VALID_ANATOMIES).each do |anatomy|
+    def self.extended(_base)
+      Concerns::Anatomiable::VALID_ANATOMIES.each do |anatomy|
         define_method(anatomy) do
           EquippableProxy.new(self, anatomy)
         end
@@ -27,7 +27,7 @@ module Concerns
 
     def import!(h)
       h.each do |k, v|
-        self.send("#{k}=", v)
+        send("#{k}=", v)
       end
 
       self
@@ -35,7 +35,7 @@ module Concerns
 
     def holding(*args)
       args.each_with_object({}) do |arg, m|
-        self.select { |anatomy, _| self.send(anatomy).send("#{arg}?") }.each do |k, v|
+        select { |anatomy, _| send(anatomy).send("#{arg}?") }.each do |k, v|
           m[k] = v
         end
       end

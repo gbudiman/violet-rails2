@@ -13,9 +13,7 @@ module Concerns
     end
 
     def passive
-      if @state.skills.has?(caller_locations(1, 1)[0].label.to_sym)
-        yield
-      end
+      yield if @state.skills.has?(caller_locations(1, 1)[0].label.to_sym)
     end
   end
 end

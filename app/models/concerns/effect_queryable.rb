@@ -50,9 +50,9 @@ module Concerns
 
     def <<(**kwargs)
       if stack? && kwargs[:duration].present?
-        raise ArgumentError, "Expected stack given duration"
+        raise ArgumentError, 'Expected stack given duration'
       elsif duration? && kwargs[:stack].present?
-        raise ArgumentError, "Expected duration given stack"
+        raise ArgumentError, 'Expected duration given stack'
       end
 
       if stack_numerical?

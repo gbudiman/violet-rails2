@@ -20,15 +20,15 @@ module Concerns
 
     module Summable
       def aux
-        self.select { |k, v| k != :base }.values.reduce(0, :+)
+        reject { |k, _v| k == :base }.values.reduce(0, :+)
       end
 
       def auxes
-        self.select { |k, v| k != :base }
+        reject { |k, _v| k == :base }
       end
 
       def to_i
-        self.values.reduce(0, :+)
+        values.reduce(0, :+)
       end
     end
   end
