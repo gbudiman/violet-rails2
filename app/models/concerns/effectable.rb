@@ -31,7 +31,7 @@ module Concerns
 
     def import!(hsh)
       hsh.each do |k, v|
-        send(k, v)
+        send("#{k}=", v)
       end
 
       self

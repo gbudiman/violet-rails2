@@ -26,7 +26,9 @@ RSpec.describe State, type: :model do
         limit_steel_lung: true,
         shield_slinger: true
       },
-      effects: {},
+      effects: {
+        stance_vigilance: { stack: :permanent }
+      },
       anatomies: {
         hand_main: :ok,
         hand_off: :ok,
@@ -89,6 +91,10 @@ RSpec.describe State, type: :model do
   end
 
   describe 'effects' do
+    it 'includes pre-imported effects' do
+      expect(effects.stance_vigilance.active?).to eq true
+    end
+
     it 'is correctly accessible' do
       effects.shield_slinger = { stack: :permanent }
       expect(effects.shield_slinger.active?).to eq true

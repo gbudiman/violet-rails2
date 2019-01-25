@@ -6,7 +6,7 @@ module Violet
       include Concerns::Stateable
       SKILLS = [].freeze
       cattr_reader :effects do
-        %i[]
+        %i[stance_vigilance]
       end
 
       def initialize(state)
