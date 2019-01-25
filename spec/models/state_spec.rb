@@ -92,6 +92,17 @@ RSpec.describe State, type: :model do
       effects.shield_slinger = { stack: :permanent }
       expect(effects.shield_slinger.active?).to eq true
     end
+
+    context "re-entrancy" do
+      before do
+        effects.shield_slinger = { stack: :permanent }
+      end
+
+      it "should append new effect correctly" do
+        expect(subject.effects.shield_slinger).to receive(:<<).and_call_original
+        Violet::Skills::Shield.new(subject)
+      end
+    end
   end
 
   context "anatomies" do
