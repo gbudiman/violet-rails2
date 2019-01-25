@@ -14,10 +14,6 @@ module Concerns
       self[:duration].present?
     end
 
-    def finite_stack?
-      stack? && self[:stack].is_a?(Integer)
-    end
-
     def duration
       self[:duration]
     end
