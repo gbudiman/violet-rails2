@@ -49,8 +49,8 @@ module Concerns
     end
 
     def <<(**kwargs)
-      raise ArgumentError, 'Expected stack given duration' if stack? && kwargs[:duration].present?
-      raise ArgumentError, 'Expected duration given stack' if duration? && kwargs[:stack].present?
+      raise IncompatibleQualifier, 'Expected stack given duration' if stack? && kwargs[:duration].present?
+      raise IncompatibleQualifier, 'Expected duration given stack' if duration? && kwargs[:stack].present?
 
       if stack_numerical?
         self[:stack] += kwargs[:stack]
@@ -85,6 +85,9 @@ module Concerns
 
     def tick!
       self - 1
+    end
+
+    class IncompatibleQualifier < StandardError
     end
   end
 end

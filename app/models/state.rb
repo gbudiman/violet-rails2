@@ -27,8 +27,8 @@ class State
       else
         effect << kwargs
       end
-    rescue ArgumentError => e
-      raise ArgumentError, "Pushing effect #{arg}: #{e.message}"
+    rescue Concerns::EffectQueryable::IncompatibleQualifier => e
+      raise Concerns::EffectQueryable::IncompatibleQualifier, "Pushing effect #{arg}: #{e.message}"
     end
   end
 end

@@ -139,7 +139,7 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
 
         expect do
           instance.efx << { stack: 30 }
-        end.to raise_error(ArgumentError, 'Expected duration given stack')
+        end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier, 'Expected duration given stack')
       end
 
       it 'raises exception on :stack << :duration' do
@@ -147,7 +147,7 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
 
         expect do
           instance.efx << { duration: 30 }
-        end.to raise_error(ArgumentError, 'Expected stack given duration')
+        end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier, 'Expected stack given duration')
       end
     end
   end
