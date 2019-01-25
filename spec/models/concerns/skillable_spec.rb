@@ -3,57 +3,57 @@
 require 'rails_helper'
 
 RSpec.describe Concerns::Skillable, type: :model do
-  subject { {}.extend(Concerns::Skillable) }
+  subject(:instance) { {}.extend(Concerns::Skillable) }
 
   it 'initializes skill properly' do
-    subject.limit_redux = true
-    expect(subject.send('limit_redux!')).to eq true
+    instance.limit_redux = true
+    expect(instance.send('limit_redux!')).to eq true
   end
 
-  it 'correctlies return the skill availability state' do
-    subject.limit_mechanics = true
-    expect(subject.limit_mechanics?).to eq true
-    expect(subject.limit_redux?).to eq false
+  it 'returns the skill availability state' do
+    instance.limit_mechanics = true
+    expect(instance.limit_mechanics?).to eq true
+    expect(instance.limit_redux?).to eq false
   end
 
-  context 'querying' do
+  describe 'querying' do
     before do
-      subject.all!(true, :limit_mechanics, :limit_redux)
+      instance.all!(true, :limit_mechanics, :limit_redux)
     end
 
     it 'invokes MultiQueryable methods correctly' do
-      expect(subject.has_all?(:limit_mechanics, :limit_redux)).to eq(true)
-      expect(subject.has_all?(:limit_mechanics, :limit_redux, :limit_steel_lung)).to eq(false)
-      expect(subject.has_all?(:limit_mechanics)).to eq(true)
-      expect(subject.has_all?(:limit_steel_lung, :limit_redux)).to eq(false)
-      expect(subject.has_one?(:limit_mechanics)).to eq(true)
-      expect(subject.has_one?(:limit_mechanics, :limit_redux)).to eq(true)
-      expect(subject.has_one?(:limit_mechanics, :limit_redux, :limit_steel_lung)).to eq(true)
-      expect(subject.has_one?(:limit_steel_lung)).to eq(false)
+      expect(instance.all?(:limit_mechanics, :limit_redux)).to eq(true)
+      expect(instance.all?(:limit_mechanics, :limit_redux, :limit_steel_lung)).to eq(false)
+      expect(instance.all?(:limit_mechanics)).to eq(true)
+      expect(instance.all?(:limit_steel_lung, :limit_redux)).to eq(false)
+      expect(instance.one?(:limit_mechanics)).to eq(true)
+      expect(instance.one?(:limit_mechanics, :limit_redux)).to eq(true)
+      expect(instance.one?(:limit_mechanics, :limit_redux, :limit_steel_lung)).to eq(true)
+      expect(instance.one?(:limit_steel_lung)).to eq(false)
     end
   end
 
-  context 'temporary disabler' do
+  describe 'temporary disabler' do
     before do
-      subject.limit_redux = true
-      expect(subject.has?(:limit_redux)).to eq true
+      instance.limit_redux = true
+      expect(instance.has?(:limit_redux)).to eq true
     end
 
     it 'allows temporarily disabling skills' do
-      subject.disable!(:limit_redux)
-      expect(subject.has?(:limit_redux)).to eq false
-      expect(subject.has?(:limit_redux, any_state: true)).to eq true
+      instance.disable!(:limit_redux)
+      expect(instance.has?(:limit_redux)).to eq false
+      expect(instance.has?(:limit_redux, any_state: true)).to eq true
 
-      subject.enable!(:limit_redux)
-      expect(subject.has?(:limit_redux)).to eq true
-      expect(subject.has?(:limit_redux, any_state: true)).to eq true
+      instance.enable!(:limit_redux)
+      expect(instance.has?(:limit_redux)).to eq true
+      expect(instance.has?(:limit_redux, any_state: true)).to eq true
     end
 
     it 'does not re-enable non-existing skill' do
-      expect(subject.has?(:limit_steel_lung)).to eq false
-      subject.enable!(:limit_steel_lung)
-      expect(subject.has?(:limit_steel_lung)).to eq false
-      expect(subject.has?(:limit_steel_lung, any_state: true)).to eq false
+      expect(instance.has?(:limit_steel_lung)).to eq false
+      instance.enable!(:limit_steel_lung)
+      expect(instance.has?(:limit_steel_lung)).to eq false
+      expect(instance.has?(:limit_steel_lung, any_state: true)).to eq false
     end
   end
 end

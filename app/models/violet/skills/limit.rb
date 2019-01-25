@@ -11,7 +11,7 @@ module Violet
 
       def initialize(state)
         super
-        resources.limit.max = stats.limit * 3 / 4 if skills.has_all?(:limit_break_mechanics, :limit_break_redux)
+        resources.limit.max = stats.limit * 3 / 4 if skills.all?(:limit_break_mechanics, :limit_break_redux)
       end
     end
   end

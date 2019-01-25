@@ -25,16 +25,16 @@ module Concerns
       end
     end
 
-    def import!(h)
-      h.each do |key, value|
+    def import!(hsh)
+      hsh.each do |key, value|
         send("#{key}=", value)
       end
 
       self
     end
 
-    def method_missing(m, *_args)
-      requested_anatomy = m.to_s.delete('=')
+    def method_missing(meth, *_args)
+      requested_anatomy = meth.to_s.delete('=')
       raise InvalidAnatomy, "Invalid Anatomy: #{requested_anatomy}"
     end
 
@@ -62,7 +62,7 @@ module Concerns
                                 when :sundered then :maimed
                                 when :maimed then :ok
                                 when :ok then :ok
-        end
+        end # rubocop:disable Layout/EndAlignment
       end
 
       def ok?

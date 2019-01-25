@@ -44,51 +44,46 @@ RSpec.describe Agent, type: :model do
     }
   end
 
-  before do
-    @bf = Battlefield.create!
-  end
+  let(:bf) { Battlefield.create! }
 
   it 'is registered to a battlefield correctly' do
     expect do
-      Agent.register!(battlefield_id: @bf.id, state: state)
+      Agent.register!(battlefield_id: bf.id, state: state)
     end.to change(Agent, :count).by 1
   end
 
-  context 'fetching' do
-    before do
-      @agent = Agent.register!(battlefield_id: @bf.id, state: state)
-    end
+  describe 'fetching' do
+    let(:agent) { Agent.register!(battlefield_id: bf.id, state: state) }
 
     it 'automaticallies convert current_state to OpenStruct' do
-      agent = Agent.find(@agent.id)
-      expect(agent.stats.str!).to be_a_kind_of(Integer)
+      expect(Agent.find(agent.id).stats.str!).to be_a_kind_of(Integer)
     end
 
-    context 'preprocessing' do
+    describe 'preprocessing' do
       before do
-        @agent.derive_secondary_stats!
+        agent.derive_secondary_stats!
       end
 
-      context 'secondary stats' do
+      describe 'secondary stats' do
         it 'is derived correctly' do
-          expect(@agent.resources.weight.capacity).to be_a_kind_of(Float)
-          expect(@agent.resources.weight!).to eq(29)
+          expect(agent.resources.weight.capacity).to be_a_kind_of(Float)
+          expect(agent.resources.weight!).to eq(29)
         end
       end
 
-      context 'equipment checks' do
+      describe 'equipment checks' do
         it 'indicates equipped status correctly' do
-          expect(@agent.equipments.hand_main.sword?).to eq(true)
-          expect(@agent.equipments.hand_off.shield?).to eq(true)
+          expect(agent.equipments.hand_main.sword?).to eq(true)
+          expect(agent.equipments.hand_off.shield?).to eq(true)
         end
       end
 
-      context 'effect checks' do
+      describe 'effect checks' do
         it 'adds effect from skills correctly' do
           equipped = state[:equipments]
-          expect(@agent.effects.shield_slinger.stack).to eq(:permanent)
-          expect(@agent.effects.actives).to include(:shield_slinger)
-          expect(@agent.resources.weight!).to eq(
+          expect(agent.effects.shield_slinger.stack).to eq(:permanent)
+          expect(agent.effects.actives).to include(:shield_slinger)
+          expect(agent.resources.weight!).to eq(
             equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
           )
         end

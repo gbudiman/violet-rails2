@@ -12,25 +12,25 @@ module EffectTestable
   end
 end
 
-RSpec.describe Concerns::EffectQueryable, type: :model do
-  subject do
+RSpec.describe Concerns::Effectable, type: :model do
+  subject(:instance) do
     {}.extend(Concerns::Effectable, EffectTestable)
   end
 
   before do
-    subject.permanent_effect = { stack: :permanent }
-    subject.active_effect = { stack: 3 }
-    subject.active_duration = { duration: 10 }
-    subject.expired_effect = { stack: 0 }
-    subject.expired_duration = { duration: 0 }
+    instance.permanent_effect = { stack: :permanent }
+    instance.active_effect = { stack: 3 }
+    instance.active_duration = { duration: 10 }
+    instance.expired_effect = { stack: 0 }
+    instance.expired_duration = { duration: 0 }
   end
 
   it 'lists #actives and #inactives correctly' do
     active_effects = %i[permanent_effect active_effect active_duration]
     inactive_effects = %i[expired_effect expired_duration]
-    expect(subject.actives.keys).to contain_exactly(*active_effects)
-    expect(subject.inactives.keys).to contain_exactly(*inactive_effects)
+    expect(instance.actives.keys).to contain_exactly(*active_effects)
+    expect(instance.inactives.keys).to contain_exactly(*inactive_effects)
 
-    expect(subject.keys).to contain_exactly(*(active_effects + inactive_effects))
+    expect(instance.keys).to contain_exactly(*(active_effects + inactive_effects))
   end
 end

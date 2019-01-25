@@ -6,10 +6,7 @@ module Concerns
 
     def self.extended(_base)
       Concerns::Anatomiable::VALID_ANATOMIES.each do |anatomy|
-        define_method(anatomy) do
-          EquippableProxy.new(self, anatomy)
-        end
-
+        define_method(anatomy) { EquippableProxy.new(self, anatomy) }
         define_method("#{anatomy}=") do |value|
           self[anatomy] = value.dup
           if anatomy.in?(Concerns::Weaponizable::VALID_WEAPONIZABLE)
@@ -18,15 +15,13 @@ module Concerns
             self[anatomy].extend(EquipQueryable)
           end
 
-          value.each do |prop, propval|
-            self[anatomy].define!(prop, propval)
-          end
+          value.each { |prop, propval| self[anatomy].define!(prop, propval) }
         end
       end
     end
 
-    def import!(h)
-      h.each do |k, v|
+    def import!(hsh)
+      hsh.each do |k, v|
         send("#{k}=", v)
       end
 

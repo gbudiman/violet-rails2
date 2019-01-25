@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Concerns::Weaponizable, type: :model do
+  pending
   # class Subject
   #   include Concerns::Weaponizable
   # end

@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Concerns::Equippable, type: :model do
-  subject { {}.extend(Concerns::Equippable) }
+  subject(:instance) { {}.extend(Concerns::Equippable) }
 
-  context 'assignment' do
+  describe 'assignment' do
     let(:input) do
       {
         hand_main: { props: %i[sword steel], weight: 20 },
@@ -24,90 +24,90 @@ RSpec.describe Concerns::Equippable, type: :model do
       }
     end
 
-    before { subject.import!(input) }
+    before { instance.import!(input) }
 
     it 'stores object properties correctly' do
-      expect(subject.hand_main.available?).to eq true
-      expect(subject.hand_main.equippable?).to eq false
-      expect(subject.hand_main.sword?).to eq true
-      expect(subject.hand_main.steel?).to eq true
-      expect(subject.hand_main.throwable?).to eq false
-      expect(subject.hand_main.weight).to eq input[:hand_main][:weight]
-      expect(subject.arm_main.available?).to eq true
-      expect(subject.arm_main.equippable?).to eq true
-      expect(subject.arm_off.available?).to eq false
-      expect(subject.arm_off.equippable?).to eq false
+      expect(instance.hand_main.available?).to eq true
+      expect(instance.hand_main.equippable?).to eq false
+      expect(instance.hand_main.sword?).to eq true
+      expect(instance.hand_main.steel?).to eq true
+      expect(instance.hand_main.throwable?).to eq false
+      expect(instance.hand_main.weight).to eq input[:hand_main][:weight]
+      expect(instance.arm_main.available?).to eq true
+      expect(instance.arm_main.equippable?).to eq true
+      expect(instance.arm_off.available?).to eq false
+      expect(instance.arm_off.equippable?).to eq false
     end
 
     it 'allows weight adjustment' do
-      subject.hand_main.weight = 32
-      expect(subject.hand_main.weight).to eq 32
+      instance.hand_main.weight = 32
+      expect(instance.hand_main.weight).to eq 32
 
-      subject[:hand_main][:weight] = 64
-      expect(subject.hand_main.weight).to eq 64
+      instance[:hand_main][:weight] = 64
+      expect(instance.hand_main.weight).to eq 64
     end
 
-    context 'query' do
-      context '#holding' do
+    context 'with queryable' do
+      describe '#holding' do
         it 'returns anatomy object holding requested properties' do
-          expect(subject.holding(:sword).keys).to contain_exactly(:hand_main)
-          expect(subject.holding(:steel, :leather).keys).to contain_exactly(:hand_main, :slingback)
+          expect(instance.holding(:sword).keys).to contain_exactly(:hand_main)
+          expect(instance.holding(:steel, :leather).keys).to contain_exactly(:hand_main, :slingback)
         end
 
-        context 'result' do
-          let(:query) { subject.holding(:steel, :leather) }
+        describe 'result' do
+          let(:query) { instance.holding(:steel, :leather) }
 
           it 'is manipulatable' do
             query.each { |_k, v| v.weight *= 2 }
             query.each do |k, _v|
-              expect(subject.send(k).weight).to eq(input[k][:weight] * 2)
+              expect(instance.send(k).weight).to eq(input[k][:weight] * 2)
             end
           end
         end
       end
     end
 
-    context 'weaponizable' do
-      context '#disarm!' do
+    context 'with weaponizable' do
+      describe '#disarm!' do
         it 'disarms target' do
-          disarmed = subject.hand_main.disarm!
-          expect(subject.hand_main.available?).to eq true
-          expect(subject.hand_main.equippable?).to eq true
+          disarmed = instance.hand_main.disarm!
+          expect(instance.hand_main.available?).to eq true
+          expect(instance.hand_main.equippable?).to eq true
           expect(disarmed).to eq(input[:hand_main])
         end
       end
 
-      context '#maim' do
+      describe '#maim' do
         it 'maims target' do
-          subject.hand_main.maim!
-          expect(subject.hand_main.maimed?).to eq(true)
-          expect(subject.hand_main.available?).to eq(true)
-          expect(subject.hand_main.equippable?).to eq(false)
-          expect(subject.hand_main.usable?).to eq(false)
-          expect(subject.hand_main.holding_something?).to eq(true)
+          instance.hand_main.maim!
+          expect(instance.hand_main.maimed?).to eq(true)
+          expect(instance.hand_main.available?).to eq(true)
+          expect(instance.hand_main.equippable?).to eq(false)
+          expect(instance.hand_main.usable?).to eq(false)
+          expect(instance.hand_main.holding_something?).to eq(true)
         end
       end
 
-      context '#sunder' do
+      describe '#sunder' do
         it 'sunders target' do
-          subject.hand_main.sunder!
-          expect(subject.hand_main.sundered?).to eq(true)
-          expect(subject.hand_main.available?).to eq(true)
-          expect(subject.hand_main.equippable?).to eq(false)
-          expect(subject.hand_main.usable?).to eq(false)
-          expect(subject.hand_main.holding_something?).to eq(false)
+          instance.hand_main.sunder!
+          expect(instance.hand_main.sundered?).to eq(true)
+          expect(instance.hand_main.available?).to eq(true)
+          expect(instance.hand_main.equippable?).to eq(false)
+          expect(instance.hand_main.usable?).to eq(false)
+          expect(instance.hand_main.holding_something?).to eq(false)
         end
       end
 
-      context '#drop!' do
+      describe '#drop!' do
         pending
       end
 
-      context '#holster!' do
+      describe '#holster!' do
         pending
       end
 
-      context '#equip' do
+      describe '#equip' do
         pending
       end
     end

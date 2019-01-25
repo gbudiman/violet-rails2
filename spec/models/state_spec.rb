@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe State, type: :model do
-  subject { State.new(state) }
+  subject(:instance) { State.new(state) }
 
   let(:state) do
     {
@@ -45,13 +45,13 @@ RSpec.describe State, type: :model do
     }
   end
 
-  let(:stats) { subject.stats }
-  let(:resources) { subject.resources }
-  let(:effects) { subject.effects }
-  let(:skills) { subject.skills }
-  let(:anatomies) { subject.anatomies }
+  let(:stats) { instance.stats }
+  let(:resources) { instance.resources }
+  let(:effects) { instance.effects }
+  let(:skills) { instance.skills }
+  let(:anatomies) { instance.anatomies }
 
-  it { expect(subject.stats).to be_a_kind_of(Hash) }
+  it { expect(instance.stats).to be_a_kind_of(Hash) }
   it 'expects stats to be initialized correctly' do
     %i[str agi dex int vit fai limit trance orb
        impulse malice mana soul gestalt prayer].each do |key|
@@ -81,32 +81,32 @@ RSpec.describe State, type: :model do
     end
   end
 
-  context 'skills' do
+  describe 'skills' do
     it 'is correctly queryable' do
       expect(skills.has?(:shield_slinger)).to eq true
       expect(skills.has?(:random_dne)).to eq false
     end
   end
 
-  context 'effects' do
+  describe 'effects' do
     it 'is correctly accessible' do
       effects.shield_slinger = { stack: :permanent }
       expect(effects.shield_slinger.active?).to eq true
     end
 
-    context 're-entrancy' do
+    describe 're-entrancy' do
       before do
         effects.shield_slinger = { stack: :permanent }
       end
 
       it 'appends new effect correctly' do
-        expect(subject.effects.shield_slinger).to receive(:<<).and_call_original
-        Violet::Skills::Shield.new(subject)
+        expect(instance.effects.shield_slinger).to receive(:<<).and_call_original
+        Violet::Skills::Shield.new(instance)
       end
     end
   end
 
-  context 'anatomies' do
+  describe 'anatomies' do
     it 'is correctly available' do
       expect(anatomies.foot_main.ok?).to eq true
     end

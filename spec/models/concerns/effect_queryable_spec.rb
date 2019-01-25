@@ -24,22 +24,22 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
     expect(instance.dummy_effect.active?).to eq true
   end
 
-  context 'invalid initialization' do
+  context 'with invalid initialization' do
     it 'rejects initialization given both stack and duration' do
       expect do
         instance.dummy_effect = { stack: :permanent, duration: 30 }
-      end.to raise_error(ArgumentError, /^Only either/)
+      end.to raise_error(Concerns::Effectable::ExclusiveStackDurationViolation, /^Either/)
     end
 
     it 'rejects initialization without either stack or duration' do
       expect do
         instance.dummy_effect = {}
-      end.to raise_error(ArgumentError, /^Either/)
+      end.to raise_error(Concerns::Effectable::ExclusiveStackDurationViolation, /^Either/)
     end
   end
 
   describe '#active?' do
-    context 'should be true when' do
+    describe 'should be true when' do
       after { expect(instance.efx.active?).to eq(true) }
 
       it 'permanent effect' do instance.efx = { stack: :permanent } end
@@ -47,7 +47,7 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
       it 'durational effect' do instance.efx = { duration: 3 } end
     end
 
-    context 'should be false when' do
+    describe 'should be false when' do
       after { expect(instance.efx.active?).to eq(false) }
 
       it 'emptied stacked effect' do instance.efx = { stack: 0 } end

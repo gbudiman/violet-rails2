@@ -10,28 +10,16 @@ module Concerns
       base.submodules_of(:skills).each do |school|
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = skill.to_sym
-
-          define_method(key) do
-            ExtensionProxy.new(self, key)
-          end
-
-          define_method("#{key}=") do |value|
-            self[key] = value
-          end
-
-          define_method("#{key}?") do
-            self[key] == true
-          end
-
-          define_method("#{key}!") do
-            self[key] || false
-          end
+          define_method(key) { ExtensionProxy.new(self, key) }
+          define_method("#{key}=") { |value| self[key] = value }
+          define_method("#{key}?") { self[key] == true }
+          define_method("#{key}!") { self[key] || false }
         end
       end
     end
 
-    def import!(h)
-      h.each do |k, v|
+    def import!(hsh)
+      hsh.each do |k, v|
         self[k] = v
       end
 

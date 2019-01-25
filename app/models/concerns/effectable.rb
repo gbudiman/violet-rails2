@@ -7,13 +7,9 @@ module Concerns
       base.submodules_of(:skills).each do |school|
         base.class_of(:skills, school).effects.each do |effect|
           key = effect.to_sym
-
-          define_method(key) do
-            self[key]
-          end
-
-          define_method("#{key}=") do |h|
-            self[key] = define_effect(h).extend(Concerns::EffectQueryable)
+          define_method(key) { self[key] }
+          define_method("#{key}=") do |hsh|
+            self[key] = define_effect(hsh).extend(Concerns::EffectQueryable)
           end
         end
       end
@@ -27,22 +23,21 @@ module Concerns
       reject { |_k, v| v.active? }
     end
 
-    def define_effect(h)
-      if h[:stack].present? && h[:duration].present?
-        raise ArgumentError, 'Only either :stack or :duration qualifier may be present, not both'
-      elsif h[:stack].blank? && h[:duration].blank?
-        raise ArgumentError, 'Either :stack or :duration must be specified'
-      end
+    def define_effect(hsh)
+      return hsh if hsh[:stack].present? ^ hsh[:duration].present?
 
-      h
+      raise ExclusiveStackDurationViolation, 'Either :stack xor :duration qualifier must be supplied.'
     end
 
-    def import!(h)
-      h.each do |k, v|
+    def import!(hsh)
+      hsh.each do |k, v|
         send(k, v)
       end
 
       self
+    end
+
+    class ExclusiveStackDurationViolation < StandardError
     end
   end
 end
