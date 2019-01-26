@@ -14,6 +14,12 @@ RSpec.describe Concerns::Anatomiable, type: :model do
       end
     end
 
+    it 'raises error when no state is given' do
+      expect do
+        instance.import!({ hand_main: {} })
+      end.to raise_error(Concerns::Anatomiable::MissingState)
+    end
+
     it 'raises error on invalid anatomy' do
       expect do
         instance.import!({ invalid_limb: { state: :ok } })
@@ -27,11 +33,42 @@ RSpec.describe Concerns::Anatomiable, type: :model do
     end
   end
 
-  # it 'is method-accessible' do
-  #   Concerns::Anatomiable::VALID_ANATOMIES.each do |anatomy|
-  #     expect(instance.send("#{anatomy}!")).to eq(:not_available)
-  #   end
-  # end
+  context 'when not available' do
+    describe 'bang method' do
+      it 'returns :not_available' do
+        Concerns::Anatomiable::VALID_ANATOMIES.each do |anatomy|
+          expect(instance.send("#{anatomy}!")).to eq(:not_available)
+        end
+      end
+    end
+  end
+
+  context 'when available' do
+    let(:input) do
+      {
+        hand_main: { state: :ok },
+        hand_off: { state: :sundered },
+        arm_main: { state: :ok },
+        head: { state: :maimed },
+      }
+    end
+    
+    before { instance.import!(input) }
+
+    describe 'bang method' do
+      it 'returns proper state' do
+        input.each do |anatomy, value|
+          expect(instance.send("#{anatomy}!")).to eq(value[:state])
+        end
+      end
+
+      it 'queries state correctly' do
+        input.each do |anatomy, value|
+          expect(instance.send(anatomy).send("#{value[:state]}?")).to eq(true)
+        end
+      end
+    end
+  end
 
   # describe 'state mutation' do
   #   before do

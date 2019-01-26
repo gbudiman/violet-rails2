@@ -9,7 +9,7 @@ module Concerns
     VALID_WEAPONIZABLE = %i[hand_main hand_off].freeze
     VALID_EQUIPPABLE = %i[arm_main arm_off foot_main foot_off head torso hip slingback].freeze
     VALID_ANATOMIES = VALID_WEAPONIZABLE + VALID_EQUIPPABLE
-    VALID_STATE = %i[not_available ok maimed sundered].freeze
+    VALID_STATES = %i[not_available ok maimed sundered].freeze
 
     VALID_ANATOMIES.each do |anatomy|
       define_method("#{anatomy}=") do |value|
@@ -26,7 +26,7 @@ module Concerns
       end
 
       define_method("#{anatomy}!") do
-        self[anatomy].send(:state) || :not_available
+        self[anatomy.to_sym]&.state || :not_available
       end
 
       define_method(anatomy) do
@@ -77,8 +77,8 @@ module Concerns
         end # rubocop:disable Layout/EndAlignment
       end
 
-      def ok?
-        @ancestor.send("#{@attribute}!") == :ok
+      def method_missing(meth, *args)
+        @field_accessor.send(meth, *args)
       end
     end
   end

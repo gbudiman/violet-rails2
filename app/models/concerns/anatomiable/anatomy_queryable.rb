@@ -5,7 +5,17 @@ module Concerns
     module AnatomyQueryable
       def self.extended(base)
         raise MissingState unless base[:state].present?
-        raise InvalidState, "Invalid State #{base[:state]}" unless base[:state].in?(VALID_STATE)
+        raise InvalidState, "Invalid State #{base[:state]}" unless base[:state].in?(VALID_STATES)
+
+        VALID_STATES.each do |state|
+          define_method("#{state}?") do
+            self[:state] == state
+          end
+        end
+      end
+
+      def state
+        self[:state]
       end
 
       def define!(prop, values)
