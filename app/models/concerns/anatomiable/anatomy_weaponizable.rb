@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 module Concerns
-  module Equippable
-    module EquipWeaponizable
-      include Concerns::Equippable::EquipQueryable
+  module Anatomiable
+    module AnatomyWeaponizable
+      def self.extended(base) 
+        base.extend(Concerns::Anatomiable::AnatomyQueryable)
+      end
 
       def usable?
         !sundered? && !maimed?

@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 module Concerns
-  module Equippable
-    module EquipQueryable
+  module Anatomiable
+    module AnatomyQueryable
+      def self.extended(base)
+        raise MissingState unless base[:state].present?
+        raise InvalidState, "Invalid State #{base[:state]}" unless base[:state].in?(VALID_STATE)
+      end
+
       def define!(prop, values)
         case prop
         when :props
