@@ -13,16 +13,14 @@ module Concerns
 
     VALID_ANATOMIES.each do |anatomy|
       define_method("#{anatomy}=") do |value|
-        begin
-          self[anatomy.to_sym] = case anatomy
-          when ->(m) { m.in?(VALID_WEAPONIZABLE) }
-            value.extend(AnatomyWeaponizable)
-          when ->(m) { m.in?(VALID_EQUIPPABLE) }
-            value.extend(AnatomyQueryable)
-          end
-        rescue InvalidState, MissingState => exception
-          raise exception, "Anatomy #{anatomy}: #{exception.message}"
-        end
+        self[anatomy.to_sym] = case anatomy
+        when ->(m) { m.in?(VALID_WEAPONIZABLE) }
+          value.extend(AnatomyWeaponizable)
+        when ->(m) { m.in?(VALID_EQUIPPABLE) }
+          value.extend(AnatomyQueryable)
+        end # rubocop:disable Layout/EndAlignment
+      rescue InvalidState, MissingState => exception
+        raise exception, "Anatomy #{anatomy}: #{exception.message}"
       end
 
       define_method("#{anatomy}!") do
@@ -47,6 +45,9 @@ module Concerns
       raise InvalidAnatomy, "Invalid Anatomy: #{requested_anatomy}"
     end
 
+    class AnatomyNotAvailable < StandardError
+    end
+
     class InvalidAnatomy < StandardError
     end
 
@@ -57,27 +58,9 @@ module Concerns
     end
 
     class AnatomyProxy < BaseProxy
-      def maim!
-        @ancestor[@attribute] = :maimed
-      end
-
-      def sunder!
-        @ancestor[@attribute] = :sundered
-      end
-
-      def pristine!
-        @ancestor[@attribute] = :ok unless @ancestor.send("#{@attribute}!") == :not_available
-      end
-
-      def repair!
-        @ancestor[@attribute] = case @ancestor.send("#{@attribute}!")
-                                when :sundered then :maimed
-                                when :maimed then :ok
-                                when :ok then :ok
-        end # rubocop:disable Layout/EndAlignment
-      end
-
       def method_missing(meth, *args)
+        raise AnatomyNotAvailable if @field_accessor.nil?
+
         @field_accessor.send(meth, *args)
       end
     end

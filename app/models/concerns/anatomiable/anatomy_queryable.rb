@@ -51,6 +51,43 @@ module Concerns
         yield
       end
 
+      def usable?
+        !sundered? && !maimed?
+      end
+
+      def maim!
+        self[:state] = :maimed
+      end
+
+      def sunder!
+        drop!
+        self[:state] = :sundered
+      end
+
+      def pristine!
+        self[:state] = :ok
+      end
+
+      def repair!
+        self[:state] = case self[:state]
+        when :sundered then :maimed
+        when :maimed then :ok
+        else self[:state]
+        end # rubocop:disable Layout/EndAlignment
+      end
+
+      def disarm!(forced: true) # rubocop:disable Lint/UnusedMethodArgument
+        cached = dup
+        clear
+        cached
+      end
+
+      def drop!
+        disarm!(forced: false)
+      end
+
+      def equip!(item); end
+
       def method_missing(_meth, *_args)
         false
       end

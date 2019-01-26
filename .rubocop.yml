@@ -12,6 +12,9 @@ AllCops:
     - 'db/**/*'
     - 'test/**'
 
+Layout/CaseIndentation:
+  Enabled: false
+  
 Metrics/AbcSize:
   Max: 24
 
