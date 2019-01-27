@@ -4,6 +4,7 @@ module Violet
   module Equipments
     VALID_PROPS = %i[
       sword
+      leather
       steel
       throwable
     ]

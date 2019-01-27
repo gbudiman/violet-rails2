@@ -34,10 +34,18 @@ module Concerns
 
     def import!(hsh)
       hsh.each do |key, value|
-        send("#{key}=", value)
+        send("#{key}=", value.dup)
       end
 
       self
+    end
+
+    def holding(*args)
+      args.each_with_object({}) do |arg, m|
+        select { |anatomy, _| send(anatomy).send("#{arg}?") }.each do |k, v|
+          m[k] = v
+        end
+      end
     end
 
     def method_missing(meth, *_args)
