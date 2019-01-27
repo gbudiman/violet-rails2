@@ -30,19 +30,16 @@ RSpec.describe State, type: :model do
         stance_vigilance: { stack: :permanent }
       },
       anatomies: {
-        hand_main: :ok,
-        hand_off: :ok,
-        arm_main: :ok,
-        arm_off: :ok,
-        foot_main: :ok,
-        foot_off: :ok,
-        torso: :ok,
-        hip: :ok,
-        slingback: :ok
-      },
-      equipments: {
-        hand_main: { props: [:sword], weight: 20 },
-        hand_off: { props: [:shield], weight: 18 }
+        hand_main: { state: :ok, props: [:sword], weight: 20 },
+        hand_off: { state: :ok, props: [:shield], weight: 18 },
+        arm_main: { state: :ok },
+        arm_off: { state: :ok },
+        foot_main: { state: :ok },
+        foot_off: { state: :ok },
+        head: { state: :ok },
+        torso: { state: :ok },
+        hip: { state: :ok },
+        slingback: { state: :ok }
       }
     }
   end

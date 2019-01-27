@@ -7,12 +7,19 @@ module Concerns
         raise MissingState unless base[:state].present?
         raise InvalidState, "Invalid State #{base[:state]}" unless base[:state].to_sym.in?(VALID_STATES)
 
+        assign_state_query_methods!
+        assign_singleton_methods!(base)
+      end
+
+      def self.assign_state_query_methods!
         VALID_STATES.each do |state|
           define_method("#{state}?") do
             self[:state] == state
           end
         end
+      end
 
+      def self.assign_singleton_methods!(base)
         base.each do |prop, values|
           case prop
           when :props
@@ -24,12 +31,9 @@ module Concerns
           end
         end
 
+        base.define_singleton_method(:state) { self[:state] }
         base.define_singleton_method(:weight) { base[:weight] || 0 }
         base.define_singleton_method(:weight=) { |v| base[:weight] = v }
-      end
-
-      def state
-        self[:state]
       end
 
       def holding_something?

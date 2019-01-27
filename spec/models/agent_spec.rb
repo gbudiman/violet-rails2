@@ -35,8 +35,8 @@ RSpec.describe Agent, type: :model do
         head: { state: :ok },
         torso: { state: :ok },
         hip: { state: :ok },
-        slingback: { state: :ok },
-      },
+        slingback: { state: :ok }
+      }
     }
   end
 

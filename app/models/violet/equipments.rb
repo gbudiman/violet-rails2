@@ -8,7 +8,7 @@ module Violet
       leather
       steel
       throwable
-    ]
+    ].freeze
     extend ActiveSupport::Concern
 
     def compute_current_weight!

@@ -12,7 +12,7 @@ module Concerns
       def pickup!(item); end
 
       def disarm!(forced: true) # rubocop:disable Lint/UnusedMethodArgument
-        cached = self.except(:state).dup
+        cached = except(:state).dup
         delete_if { |k, _v| k != :state }
         cached
       end
