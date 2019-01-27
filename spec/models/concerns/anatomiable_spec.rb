@@ -85,6 +85,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
         instance.hand_main.maim!
         expect(instance.hand_main.ok?).to eq(false)
         expect(instance.hand_main!).to eq(:maimed)
+        expect(instance.hand_main.usable?).to eq(false)
       end
     end
 
@@ -93,6 +94,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
         instance.hand_main.sunder!
         expect(instance.hand_main.ok?).to eq(false)
         expect(instance.hand_main!).to eq(:sundered)
+        expect(instance.hand_main.usable?).to eq(false)
       end
     end
 
@@ -104,6 +106,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
           instance.hand_main.pristine!
           expect(instance.hand_main.ok?).to eq(true)
           expect(instance.hand_main!).to eq(:ok)
+          expect(instance.hand_main.usable?).to eq(true)
         end
       end
 
@@ -114,6 +117,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
           instance.hand_main.pristine!
           expect(instance.hand_main.ok?).to eq(true)
           expect(instance.hand_main!).to eq(:ok)
+          expect(instance.hand_main.usable?).to eq(true)
         end
       end
 
@@ -124,6 +128,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
           instance.hand_main.pristine!
           expect(instance.hand_main.ok?).to eq(true)
           expect(instance.hand_main!).to eq(:ok)
+          expect(instance.hand_main.usable?).to eq(true)
         end
       end
 
@@ -144,6 +149,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
           instance.hand_main.repair!
           expect(instance.hand_main.ok?).to eq(false)
           expect(instance.hand_main!).to eq(:maimed)
+          expect(instance.hand_main.usable?).to eq(false)
         end
       end
 
@@ -154,6 +160,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
           instance.hand_main.repair!
           expect(instance.hand_main.ok?).to eq(true)
           expect(instance.hand_main!).to eq(:ok)
+          expect(instance.hand_main.usable?).to eq(true)
         end
       end
 
@@ -164,6 +171,7 @@ RSpec.describe Concerns::Anatomiable, type: :model do
           instance.hand_main.repair!
           expect(instance.hand_main.ok?).to eq(true)
           expect(instance.hand_main!).to eq(:ok)
+          expect(instance.hand_main.usable?).to eq(true)
         end
       end
 
