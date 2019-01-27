@@ -137,6 +137,12 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
         instance.efx << { duration: 30 }
         expect(instance.efx.duration).to eq(60)
       end
+
+      it 'raises error on incompatible type' do
+        expect do 
+          instance.efx << { stack: 15 }
+        end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier)
+      end
     end
 
     context 'with mismatched numerator' do
