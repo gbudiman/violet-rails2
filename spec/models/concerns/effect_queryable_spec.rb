@@ -112,7 +112,7 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
       end
 
       it 'raises error on incompatible type' do
-        expect do 
+        expect do
           instance.efx << { duration: 15 }
         end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier)
       end
@@ -139,7 +139,7 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
       end
 
       it 'raises error on incompatible type' do
-        expect do 
+        expect do
           instance.efx << { stack: 15 }
         end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier)
       end

@@ -19,15 +19,12 @@ module Concerns
     end
 
     module Queryable
-      def auxes
-        reject { |k, _v| k == :current }
-      end
-
       def to_i
         self[:current] || 0
       end
 
-      alias aux auxes
+      alias aux to_i
+      alias auxes to_i
     end
   end
 end

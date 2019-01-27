@@ -73,6 +73,7 @@ RSpec.describe State, type: :model do
        impulse malice mana soul gestalt prayer].each do |key|
       expect(resources.send("#{key}!")).to eq(state[:resources][key] || 0)
       expect(resources.send(key).send(:current)).to eq(state[:resources][key] || 0)
+      expect(resources.send(key).send(:auxes)).to eq(state[:resources][key] || 0)
 
       random_number = 2000
       resources.send(key).capacity = random_number
