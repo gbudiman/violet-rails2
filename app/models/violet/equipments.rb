@@ -2,14 +2,21 @@
 
 module Violet
   module Equipments
+    VALID_PROPS = %i[
+      sword
+      shield
+      leather
+      steel
+      throwable
+    ].freeze
     extend ActiveSupport::Concern
 
     def compute_current_weight!
       current_weight = 0
 
-      equipments.each do |_anatomy, equipment|
-        current_weight += equipment.execute_callback(:weight_reduction) do
-          equipment[:weight]
+      anatomies.each do |_name, anatomy|
+        current_weight += anatomy.execute_callback(:weight_reduction) do
+          anatomy.weight
         end
       end
 

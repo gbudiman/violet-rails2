@@ -26,20 +26,16 @@ RSpec.describe Agent, type: :model do
       },
       effects: {},
       anatomies: {
-        hand_main: :ok,
-        hand_off: :ok,
-        arm_main: :ok,
-        arm_off: :ok,
-        foot_main: :ok,
-        foot_off: :ok,
-        head: :ok,
-        torso: :ok,
-        hip: :ok,
-        slingback: :ok
-      },
-      equipments: {
-        hand_main: { props: [:sword], weight: 20 },
-        hand_off: { props: [:shield], weight: 18 }
+        hand_main: { state: :ok, props: [:sword], weight: 20 },
+        hand_off: { state: :ok, props: [:shield], weight: 18 },
+        arm_main: { state: :ok },
+        arm_off: { state: :ok },
+        foot_main: { state: :ok },
+        foot_off: { state: :ok },
+        head: { state: :ok },
+        torso: { state: :ok },
+        hip: { state: :ok },
+        slingback: { state: :ok }
       }
     }
   end
@@ -73,18 +69,18 @@ RSpec.describe Agent, type: :model do
 
       describe 'equipment checks' do
         it 'indicates equipped status correctly' do
-          expect(agent.equipments.hand_main.sword?).to eq(true)
-          expect(agent.equipments.hand_off.shield?).to eq(true)
+          expect(agent.anatomies.hand_main.sword?).to eq(true)
+          expect(agent.anatomies.hand_off.shield?).to eq(true)
         end
       end
 
       describe 'effect checks' do
         it 'adds effect from skills correctly' do
-          equipped = state[:equipments]
+          anatomies = state[:anatomies]
           expect(agent.effects.shield_slinger.stack).to eq(:permanent)
           expect(agent.effects.actives).to include(:shield_slinger)
           expect(agent.resources.weight!).to eq(
-            equipped[:hand_main][:weight] + equipped[:hand_off][:weight] / 2
+            anatomies[:hand_main][:weight] + anatomies[:hand_off][:weight] / 2
           )
         end
       end
