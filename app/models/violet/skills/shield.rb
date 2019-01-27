@@ -20,9 +20,9 @@ module Violet
       def shield_slinger
         passive do
           state.push_effect(stack: :permanent, callback: lambda { |agent|
-            agent.equipments.holding(:shield).each do |_anatomy, equipment|
-              equipment.callbacks(:shield_slinger, :weight_reduction, lambda {
-                equipment.weight /= 2
+            agent.anatomies.holding(:shield).each do |_name, anatomy|
+              anatomy.callbacks(:shield_slinger, :weight_reduction, lambda {
+                anatomy.weight /= 2
               })
             end
           })

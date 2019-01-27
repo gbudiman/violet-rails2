@@ -5,7 +5,7 @@ module Concerns
     module AnatomyQueryable
       def self.extended(base)
         raise MissingState unless base[:state].present?
-        raise InvalidState, "Invalid State #{base[:state]}" unless base[:state].in?(VALID_STATES)
+        raise InvalidState, "Invalid State #{base[:state]}" unless base[:state].to_sym.in?(VALID_STATES)
 
         VALID_STATES.each do |state|
           define_method("#{state}?") do
@@ -15,22 +15,17 @@ module Concerns
 
         base.each do |prop, values|
           case prop
-          # when :state
-          #   define_singleton_method(:state) { self[:state] }
-          #   define_singleton_method(:state=) do |v|
-          #     raise InvalidState, "Invalid State #{v}" unless v.in?(VALID_STATES)
-          #     self[:state] = v
-          #   end
           when :props
             values.each do |value|
               base.define_singleton_method("#{value}?") { true }
             end
           when :weight
             base[prop] = values
-            base.define_singleton_method(prop) { base[prop] }
-            base.define_singleton_method("#{prop}=") { |v| base[prop] = v }
           end
         end
+
+        base.define_singleton_method(:weight) { base[:weight] || 0 }
+        base.define_singleton_method(:weight=) { |v| base[:weight] = v }
       end
 
       def state
