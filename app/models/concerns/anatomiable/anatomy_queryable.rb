@@ -12,24 +12,34 @@ module Concerns
             self[:state] == state
           end
         end
+
+        base.each do |prop, values|
+          case prop
+          # when :state
+          #   define_singleton_method(:state) { self[:state] }
+          #   define_singleton_method(:state=) do |v|
+          #     raise InvalidState, "Invalid State #{v}" unless v.in?(VALID_STATES)
+          #     self[:state] = v
+          #   end
+          when :props
+            values.each do |value|
+              base.define_singleton_method("#{value}?") { true }
+            end
+          when :weight
+            base[prop] = values
+            base.define_singleton_method(prop) { base[prop] }
+            base.define_singleton_method("#{prop}=") { |v| base[prop] = v }
+          end
+        end
       end
 
       def state
         self[:state]
       end
 
-      def define!(prop, values)
-        case prop
-        when :props
-          values.each do |value|
-            define_singleton_method("#{value}?") { true }
-          end
-        when :weight
-          self[prop] = values
-          define_singleton_method(prop) { self[prop] }
-          define_singleton_method("#{prop}=") { |v| self[prop] = v }
-        end
-      end
+      # def self.define!(prop, values)
+        
+      # end
 
       def holding_something?
         key?(:props) && key?(:weight)
@@ -49,6 +59,10 @@ module Concerns
         end
 
         yield
+      end
+
+      def equippable?
+        !holding_something? && !sundered?
       end
 
       def usable?
@@ -88,8 +102,13 @@ module Concerns
 
       def equip!(item); end
 
-      def method_missing(_meth, *_args)
-        false
+      def method_missing(meth, *args)
+        case meth
+        when ->(m) { m[-1] == '?' }
+          return false if meth[0..-2].to_sym.in?(Violet::Equipments::VALID_PROPS)
+        end
+
+        raise NoMethodError, "#{meth} with #{args}"
       end
     end
   end

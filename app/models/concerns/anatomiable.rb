@@ -58,6 +58,10 @@ module Concerns
     end
 
     class AnatomyProxy < BaseProxy
+      def available?
+        @field_accessor.present?
+      end
+
       def method_missing(meth, *args)
         raise AnatomyNotAvailable if @field_accessor.nil?
 

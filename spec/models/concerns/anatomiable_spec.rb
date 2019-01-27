@@ -176,4 +176,39 @@ RSpec.describe Concerns::Anatomiable, type: :model do
       end
     end
   end
+
+  context 'with complex content' do
+    let(:input) do
+      {
+        hand_main: { props: %i[sword steel], weight: 20, state: :ok },
+        hand_off: { props: %i[shield wooden], weight: 18, state: :ok },
+        arm_main: { state: :ok },
+        slingback: {
+          props: %i[slingback leather],
+          weight: 1,
+          state: :ok,
+          contents: [
+            { props: %i[arrow iron], weight: 0.1 },
+            { props: %i[arrow iron], weight: 0.1 },
+            { props: %i[arrow iron], weight: 0.1 },
+            { props: %i[arrow iron], weight: 0.1 }
+          ]
+        }
+      }
+    end
+
+    before { instance.import!(input) }
+
+    it 'stores object properties correctly' do
+      expect(instance.hand_main.available?).to eq true
+      expect(instance.hand_main.equippable?).to eq false
+      expect(instance.hand_main.sword?).to eq true
+      expect(instance.hand_main.steel?).to eq true
+      expect(instance.hand_main.throwable?).to eq false
+      expect(instance.hand_main.weight).to eq input[:hand_main][:weight]
+      expect(instance.arm_main.available?).to eq true
+      expect(instance.arm_main.equippable?).to eq true
+      expect(instance.arm_off.available?).to eq false
+    end
+  end
 end

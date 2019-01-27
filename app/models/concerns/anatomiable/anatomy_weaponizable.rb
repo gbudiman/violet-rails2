@@ -11,9 +11,9 @@ module Concerns
 
       def pickup!(item); end
 
-      def method_missing(_meth, *_args)
-        false
-      end
+      # def method_missing(_meth, *_args)
+      #   false
+      # end
     end
   end
 end

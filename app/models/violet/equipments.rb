@@ -2,6 +2,11 @@
 
 module Violet
   module Equipments
+    VALID_PROPS = %i[
+      sword
+      steel
+      throwable
+    ]
     extend ActiveSupport::Concern
 
     def compute_current_weight!
