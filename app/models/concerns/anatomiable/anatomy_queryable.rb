@@ -32,10 +32,6 @@ module Concerns
         self[:state]
       end
 
-      # def self.define!(prop, values)
-        
-      # end
-
       def holding_something?
         key?(:props) && key?(:weight)
       end
@@ -83,16 +79,6 @@ module Concerns
         when :maimed then :ok
         else self[:state]
         end # rubocop:disable Layout/EndAlignment
-      end
-
-      def disarm!(forced: true) # rubocop:disable Lint/UnusedMethodArgument
-        cached = dup
-        clear
-        cached
-      end
-
-      def drop!
-        disarm!(forced: false)
       end
 
       def equip!(item); end

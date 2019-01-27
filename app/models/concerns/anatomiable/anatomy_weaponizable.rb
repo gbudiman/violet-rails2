@@ -11,9 +11,15 @@ module Concerns
 
       def pickup!(item); end
 
-      # def method_missing(_meth, *_args)
-      #   false
-      # end
+      def disarm!(forced: true) # rubocop:disable Lint/UnusedMethodArgument
+        cached = self.except(:state).dup
+        delete_if { |k, _v| k != :state }
+        cached
+      end
+
+      def drop!
+        disarm!(forced: false)
+      end
     end
   end
 end

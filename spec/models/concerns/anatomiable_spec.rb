@@ -219,20 +219,33 @@ RSpec.describe Concerns::Anatomiable, type: :model do
       expect(instance.hand_main.weight).to eq 64
     end
 
-    describe '#holding' do
-      it 'returns anatomy object holding requested properties' do
-        expect(instance.holding(:sword).keys).to contain_exactly(:hand_main)
-        expect(instance.holding(:steel, :leather).keys).to contain_exactly(:hand_main, :slingback)
-      end
+    context 'with queryable' do
+      describe '#holding' do
+        it 'returns anatomy object holding requested properties' do
+          expect(instance.holding(:sword).keys).to contain_exactly(:hand_main)
+          expect(instance.holding(:steel, :leather).keys).to contain_exactly(:hand_main, :slingback)
+        end
 
-      describe 'result' do
-        let(:query) { instance.holding(:steel, :leather) }
+        describe 'result' do
+          let(:query) { instance.holding(:steel, :leather) }
 
-        it 'is manipulatable' do
-          query.each { |_k, v| v.weight *= 2 }
-          query.each do |k, _v|
-            expect(instance.send(k).weight).to eq(input[k][:weight] * 2)
+          it 'is manipulatable' do
+            query.each { |_k, v| v.weight *= 2 }
+            query.each do |k, _v|
+              expect(instance.send(k).weight).to eq(input[k][:weight] * 2)
+            end
           end
+        end
+      end
+    end
+
+    context 'with weaponizable' do
+      describe '#disarm!' do
+        it 'disarms target' do
+          disarmed = instance.hand_main.disarm!
+          expect(instance.hand_main.available?).to eq true
+          expect(instance.hand_main.equippable?).to eq true
+          expect(disarmed).to eq(input[:hand_main].except(:state))
         end
       end
     end
