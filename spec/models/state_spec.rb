@@ -99,13 +99,23 @@ RSpec.describe State, type: :model do
     end
 
     describe 're-entrancy' do
-      before do
-        effects.shield_slinger = { stack: :permanent }
+      context 'with compatible type' do
+        before { effects.shield_slinger = { stack: :permanent } }
+
+        it 'appends new effect correctly' do
+          expect(instance.effects.shield_slinger).to receive(:<<).and_call_original
+          Violet::Skills::Shield.new(instance)
+        end
       end
 
-      it 'appends new effect correctly' do
-        expect(instance.effects.shield_slinger).to receive(:<<).and_call_original
-        Violet::Skills::Shield.new(instance)
+      context 'with incompatible type' do
+        before { effects.shield_slinger = { duration: 30 } }
+
+        it 'raises error' do
+          expect do
+            Violet::Skills::Shield.new(instance)
+          end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier)
+        end
       end
     end
   end
