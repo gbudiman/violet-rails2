@@ -227,6 +227,10 @@ RSpec.describe Concerns::Anatomiable, type: :model do
       expect(instance.hand_main.weight).to eq 64
     end
 
+    it 'raises error on janky method' do
+      expect { instance.hand_main.janky }.to raise_error(NoMethodError)
+    end
+
     context 'with queryable' do
       describe '#holding' do
         it 'returns anatomy object holding requested properties' do
