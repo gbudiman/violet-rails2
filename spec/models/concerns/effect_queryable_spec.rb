@@ -110,6 +110,12 @@ RSpec.describe Concerns::EffectQueryable, type: :model do
         instance.efx << { stack: 12 }
         expect(instance.efx.stack).to eq(27)
       end
+
+      it 'raises error on incompatible type' do
+        expect do 
+          instance.efx << { duration: 15 }
+        end.to raise_error(Concerns::EffectQueryable::IncompatibleQualifier)
+      end
     end
 
     context 'with suppressed stack' do
