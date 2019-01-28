@@ -2,6 +2,19 @@
 
 module Concerns
   module Skillable
+    class MissingSkillPrerequisite < StandardError
+      attr_reader :skill, :all, :missing, :has
+
+      def initialize(hsh)
+        @skill = hsh[:skill]
+        @all = hsh[:all]
+        @missing = hsh[:missing]
+        @has = @all - @missing
+
+        super
+      end
+    end
+
     extend ActiveSupport::Concern
 
     def self.extended(base)
@@ -11,11 +24,29 @@ module Concerns
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = skill.to_sym
           define_method(key) { ExtensionProxy.new(self, key) }
-          define_method("#{key}=") { |value| self[key] = value }
+          define_method("#{key}=") do |value| 
+            validate_prerequisites!(key)
+            self[key] = value
+          end
           define_method("#{key}?") { self[key] == true }
           define_method("#{key}!") { self[key] || false }
         end
       end
+    end
+
+    def validate_prerequisites!(key)
+      return if Concerns::Stateable::preqs[key].nil?
+      return if self.all?(Concerns::Stateable::preqs[key])
+      raise MissingSkillPrerequisite, list_missing_prerequisites(key)
+    end
+
+    def list_missing_prerequisites(key)
+      all = Concerns::Stateable::preqs[key]
+      {
+        skill: key,
+        all: all,
+        missing: all.reject { |preq| has?(preq) }
+      }
     end
 
     def import!(hsh)
