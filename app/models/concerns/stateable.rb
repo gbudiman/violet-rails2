@@ -3,7 +3,9 @@
 module Concerns
   module Stateable
     extend ActiveSupport::Concern
-    mattr_accessor :preqs do {} end
+    mattr_accessor :preqs do
+      {}
+    end
 
     included do
       attr_accessor :state
@@ -12,8 +14,8 @@ module Concerns
 
     class_methods do
       def prerequisites_for(skill, prerequisites)
-        Concerns::Stateable::preqs[skill] ||= []
-        Concerns::Stateable::preqs[skill] += Array.wrap(prerequisites)
+        Concerns::Stateable.preqs[skill] ||= []
+        Concerns::Stateable.preqs[skill] += Array.wrap(prerequisites)
       end
     end
 

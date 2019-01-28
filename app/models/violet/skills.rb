@@ -5,7 +5,6 @@ module Violet
     cattr_accessor :skill_preqs
 
     class << self
-      
     end
   end
 end

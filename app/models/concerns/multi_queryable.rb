@@ -3,7 +3,7 @@
 module Concerns
   module MultiQueryable
     def all?(*args)
-      args.map { |x| has?(x) }.reduce(true) { |a, b| a && b }
+      args.compact.map { |x| has?(x) }.reduce(true) { |a, b| a && b }
     end
 
     def one?(*args)
