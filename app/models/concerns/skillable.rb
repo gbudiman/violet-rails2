@@ -24,7 +24,7 @@ module Concerns
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = skill.to_sym
           define_method(key) { ExtensionProxy.new(self, key) }
-          define_method("#{key}=") do |value|
+          define_method("#{key}=") do |value| 
             validate_prerequisites!(key)
             self[key] = value
           end
@@ -35,14 +35,13 @@ module Concerns
     end
 
     def validate_prerequisites!(key)
-      return if Concerns::Stateable.preqs[key].nil?
-      return if all?(Concerns::Stateable.preqs[key])
-
+      return if Concerns::Stateable::preqs[key].nil?
+      return if self.all?(*Concerns::Stateable::preqs[key])
       raise MissingSkillPrerequisite, list_missing_prerequisites(key)
     end
 
     def list_missing_prerequisites(key)
-      all = Concerns::Stateable.preqs[key]
+      all = Concerns::Stateable::preqs[key]
       {
         skill: key,
         all: all,

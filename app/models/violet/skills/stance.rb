@@ -47,6 +47,7 @@ module Violet
         ]
       end
 
+      prerequisites_for :stance_vigilance_keen_eyes, :stance_vigilance
       prerequisites_for :stance_bulwark_bladestorm, :stance_bulwark
 
       def initialize(state)
