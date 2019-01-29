@@ -24,7 +24,7 @@ module Concerns
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = skill.to_sym
           define_method(key) { ExtensionProxy.new(self, key) }
-          define_method("#{key}=") do |value|
+          define_method("#{key}=") do |value| 
             validate_prerequisites!(key)
             self[key] = value
           end
@@ -34,15 +34,67 @@ module Concerns
       end
     end
 
-    def validate_prerequisites!(key)
-      return if Concerns::Stateable.preqs[key].nil?
-      return if all?(*Concerns::Stateable.preqs[key])
+    def smart_import!(list)
+      unresolved_stack = []
+      iteration_count = {}
 
-      raise MissingSkillPrerequisite, list_missing_prerequisites(key)
+      worklist = list.dup
+      loop do
+
+        Array.wrap(worklist).each do |element|
+          ap "trying to append #{element}"
+          import_if_possible(element)
+
+          if prerequisite_satisfied?(element)
+            ap "adding #{element} if not exist..."
+            self.send("#{element}=", true) unless has?(element)
+          else
+            ap "Unable to resolve #{element} yet..."
+            unresolved_stack |= Array.wrap(element)
+          end
+        end
+
+        break if unresolved_stack.blank?
+        worklist = unresolved_stack.dup
+        unresolved_stack = []
+        ap "Current unresolved stack is"
+        ap worklist
+      end
+    end
+
+    def import_if_possible(skill)
+      prerequisites = Concerns::Stateable.preqs[skill]
+      if has?(skill)
+        ap "already has #{skill}, moving on..."
+      elsif prerequisite_satisfied?(skill)
+        ap "preqs satisfied for #{skill}, adding..."
+        self.send("#{skill}=", true)
+        ap self
+      elsif prerequisites.blank?
+        ap "no preqs for #{skill}, adding..."
+        self.send("#{skill}=", true)
+        ap self
+      else
+        ap "recursive strategy for #{skill}..."
+        prerequisites.each do |preq|
+          import_if_possible(preq)
+        end
+      end
+    end
+
+    def prerequisite_satisfied?(key)
+      return true if Concerns::Stateable::preqs[key].nil?
+      return true if self.all?(*Concerns::Stateable::preqs[key])
+      false
+    end
+
+    def validate_prerequisites!(key)
+      raise MissingSkillPrerequisite, 
+        list_missing_prerequisites(key) unless prerequisite_satisfied?(key)
     end
 
     def list_missing_prerequisites(key)
-      all = Concerns::Stateable.preqs[key]
+      all = Concerns::Stateable::preqs[key]
       {
         skill: key,
         all: all,

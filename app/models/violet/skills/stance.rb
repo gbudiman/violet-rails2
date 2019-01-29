@@ -67,12 +67,6 @@ module Violet
         stance_phalanx_polearm: :stance_phalanx_gap
       )
 
-      # prerequisites_for :stance_vigilance_keen_eyes, :stance_vigilance
-      # prerequisites_for :stance_bulwark_bladestorm, :stance_bulwark
-      # prerequisites_for :stance_bulwark, :stance_vigilance
-      # prerequisites_for :stance_colossus, :stance_vigilance
-      # prerequisites_for :stance_recovery, :stance_vigilance
-
       def initialize(state)
         super
       end
