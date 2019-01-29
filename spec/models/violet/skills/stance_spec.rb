@@ -24,6 +24,7 @@ RSpec.shared_examples 'a skill with prerequisites' do
   it 'rejects skills with unfulfilled prerequisites' do
     skills_under_test.each do |skill, preqs|
       next if preqs.nil?
+
       expect { assign_subject(skill) }.to raise_error do |error|
         expect(error).to be_a_kind_of(Concerns::Skillable::MissingSkillPrerequisite)
         expect(error.missing).to contain_exactly(*preqs)
@@ -37,10 +38,12 @@ RSpec.describe Violet::Skills::Stance do
 
   it_behaves_like 'a skill with prerequisites' do
     let(:skill_container) { skills }
-    let(:skills_under_test) do 
+    let(:skills_under_test) do
       {
         stance_vigilance: nil,
         stance_vigilance_keen_eyes: :stance_vigilance,
+        stance_bulwark: :stance_vigilance,
+        stance_bulwark_bladestorm: :stance_bulwark,
       }
     end
   end
