@@ -48,23 +48,23 @@ module Violet
       end
 
       prerequisites_map(
-        stance_bulwark: :stance_vigilance,
-        stance_colossus: :stance_vigilance,
-        stance_recovery: :stance_vigilance,
-        stance_mobility: :stance_bulwark,
-        stance_aggression: :stance_colossus,
-        stance_focus: :stance_recovery,
-        stance_phalanx: %i[stance_mobility stance_aggression stance_focus],
-        stance_vigilance_keen_eyes: :stance_vigilance,
-        stance_bulwark_bladestorm: :stance_bulwark,
-        stance_colossus_deadlock: :stance_colossus,
-        stance_aggression_shield_durability: :stance_aggression,
-        stance_aggression_quicken: :stance_aggression,
-        stance_aggression_continuum: :stance_aggression,
-        stance_recovery_deft_block: :stance_recovery,
-        stance_phalanx_extension: :stance_phalanx,
-        stance_phalanx_gap: :stance_phalanx_extension,
-        stance_phalanx_polearm: :stance_phalanx_gap
+        bulwark: :vigilance,
+        colossus: :vigilance,
+        recovery: :vigilance,
+        mobility: :bulwark,
+        aggression: :colossus,
+        focus: :recovery,
+        phalanx: %i[mobility aggression focus],
+        vigilance_keen_eyes: :vigilance,
+        bulwark_bladestorm: :bulwark,
+        colossus_deadlock: :colossus,
+        aggression_shield_durability: :aggression,
+        aggression_quicken: :aggression,
+        aggression_continuum: :aggression,
+        recovery_deft_block: :recovery,
+        phalanx_extension: :phalanx,
+        phalanx_gap: :phalanx_extension,
+        phalanx_polearm: :phalanx_gap
       )
 
       def initialize(state)
