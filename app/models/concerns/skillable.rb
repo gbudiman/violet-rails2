@@ -35,84 +35,33 @@ module Concerns
     end
 
     def smart_import!(list)
-      Array.wrap(list).each do |element|
-        if has?(element)
-          ap "already has #{element}"
-        elsif prerequisite_satisfied?(element)
-          ap "preqs satisfied for #{element}"
-          self << element
-        else
-          Concerns::Stateable.preqs[element].each do |preq|
-            if preq.in?(Array.wrap(list))
-              ap "pushing preq #{preq}"
-              self << preq
-            else
-              ap "failed preq #{preq}"
+      loop do
+        changes_made = 0
+
+        Array.wrap(list).each do |element|
+          next if has?(element)
+
+          if prerequisite_satisfied?(element)
+            changes_made += 1
+            self << element
+          else
+            Concerns::Stateable.preqs[element].each do |preq|
+              if preq.in?(Array.wrap(list))
+                changes_made += 1
+                self << preq 
+              end
             end
           end
         end
+
+        break if changes_made == 0 || changes_made == Array.wrap(list).length
       end
+
     end
 
     def <<(other)
       self.send("#{other}=", true)
     end
-
-    # def smart_import!(list)
-    #   unresolved_stack = []
-    #   iteration_count = {}
-
-    #   worklist = list.dup
-    #   loop do
-    #     Array.wrap(worklist).each do |element|
-    #       ap "trying to append #{element}"
-    #       if import_if_possible(element, list)
-    #       else
-    #         unresolved_stack << element
-    #       end
-
-    #       # if prerequisite_satisfied?(element)
-    #       #   ap "adding #{element} if not exist..."
-    #       #   self.send("#{element}=", true) unless has?(element)
-    #       # else
-    #       #   ap "Unable to resolve #{element} yet..."
-    #       #   unresolved_stack |= Array.wrap(element)
-    #       # end
-    #     end
-
-    #     break if unresolved_stack.blank?
-    #     worklist = unresolved_stack.dup
-    #     unresolved_stack = []
-    #     ap "Current unresolved stack is"
-    #     ap worklist
-    #   end
-    # end
-
-    # def import_if_possible(skill, list)
-    #   prerequisites = Concerns::Stateable.preqs[skill]
-    #   if has?(skill)
-    #     ap "already has #{skill}, moving on..."
-    #     return true
-    #   elsif prerequisite_satisfied?(skill)
-    #     ap "preqs satisfied for #{skill}, adding..."
-    #     self.send("#{skill}=", true)
-    #     ap self
-    #     return true
-    #   elsif has?(skill) && prerequisites.blank?
-    #     ap "no preqs for #{skill}, adding..."
-    #     self.send("#{skill}=", true)
-    #     ap self
-    #     return true
-    #   elsif !has?(skill) && prerequisites.blank?
-    #     ap "no preqs for #{skill} but"
-    #     return false
-    #   else
-    #     ap "recursive strategy for #{skill}..."
-    #     prerequisites.each do |preq|
-    #       import_if_possible(preq)
-    #     end
-    #   end
-    # end
 
     def prerequisite_satisfied?(key)
       return true if Concerns::Stateable::preqs[key].nil?
@@ -126,7 +75,7 @@ module Concerns
     end
 
     def list_missing_prerequisites(key)
-      all = deep_prerequisites(key) #Concerns::Stateable::preqs[key]
+      all = deep_prerequisites(key)
       {
         skill: key,
         all: all,
