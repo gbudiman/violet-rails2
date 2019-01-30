@@ -54,7 +54,7 @@ module Violet
         stance_mobility: :stance_bulwark,
         stance_aggression: :stance_colossus,
         stance_focus: :stance_recovery,
-        stance_phalanx: [:stance_mobility, :stance_aggression, :stance_focus],
+        stance_phalanx: %i[stance_mobility stance_aggression stance_focus],
         stance_vigilance_keen_eyes: :stance_vigilance,
         stance_bulwark_bladestorm: :stance_bulwark,
         stance_colossus_deadlock: :stance_colossus,

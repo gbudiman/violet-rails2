@@ -24,7 +24,7 @@ module Concerns
         base.class_of(:skills, school)::SKILLS.each do |skill|
           key = skill.to_sym
           define_method(key) { ExtensionProxy.new(self, key) }
-          define_method("#{key}=") do |value| 
+          define_method("#{key}=") do |value|
             validate_prerequisites!(key)
             self[key] = value
           end
@@ -34,11 +34,14 @@ module Concerns
       end
     end
 
-    def smart_import!(list)
+    def smart_import!(list) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      unresolved_skills = []
+
       loop do
         changes_made = 0
 
         Array.wrap(list).each do |element|
+          unresolved_skills.delete(element)
           next if has?(element)
 
           if prerequisite_satisfied?(element)
@@ -48,30 +51,37 @@ module Concerns
             Concerns::Stateable.preqs[element].each do |preq|
               if preq.in?(Array.wrap(list))
                 changes_made += 1
-                self << preq 
+                self << preq
+              else
+                unresolved_skills << preq
               end
             end
           end
         end
 
-        break if changes_made == 0 || changes_made == Array.wrap(list).length
+        break if changes_made.zero? || (Array.wrap(list).length == changes_made)
       end
 
+      return unless (Array.wrap(list) - keys).length.positive?
+
+      raise MissingSkillPrerequisite, "Unresolved skills #{unresolved_skills}"
     end
 
     def <<(other)
-      self.send("#{other}=", true)
+      send("#{other}=", true)
     end
 
     def prerequisite_satisfied?(key)
-      return true if Concerns::Stateable::preqs[key].nil?
-      return true if self.all?(*Concerns::Stateable::preqs[key])
+      return true if Concerns::Stateable.preqs[key].nil?
+      return true if all?(*Concerns::Stateable.preqs[key])
+
       false
     end
 
     def validate_prerequisites!(key)
-      raise MissingSkillPrerequisite, 
-        list_missing_prerequisites(key) unless prerequisite_satisfied?(key)
+      return if prerequisite_satisfied?(key)
+
+      raise MissingSkillPrerequisite, list_missing_prerequisites(key)
     end
 
     def list_missing_prerequisites(key)
@@ -84,7 +94,7 @@ module Concerns
     end
 
     def deep_prerequisites(key)
-      y = (Concerns::Stateable::preqs[key] || []).map do |preq|
+      y = (Concerns::Stateable.preqs[key] || []).map do |preq|
         deep_prerequisites(preq)
       end
 
