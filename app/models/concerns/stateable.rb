@@ -43,9 +43,8 @@ module Concerns
           ([skill] + Array.wrap(preqs)).reject { |x| x.in?(valid_skills) }
         end.reduce([]) { |a, b| a + b }.uniq.compact # rubocop:disable Style/MultilineBlockChain
 
-        if invalids.present? # rubocop:disable Style/GuardClause
-          raise Violet::Skills::InvalidSkillName, "Invalid prerequisites_map for #{klass}: #{invalids}"
-        end
+        return unless invalids.present?
+        raise Violet::Skills::InvalidSkillName, "Invalid prerequisites_map for #{klass}: #{invalids}"
       end
     end
 
