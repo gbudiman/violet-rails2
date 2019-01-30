@@ -15,6 +15,9 @@ module Concerns
       end
     end
 
+    class UnresolvedSkillImport < StandardError
+    end
+
     extend ActiveSupport::Concern
 
     def self.extended(base)
@@ -49,7 +52,7 @@ module Concerns
             self << element
           else
             Concerns::Stateable.preqs[element].each do |preq|
-              if preq.in?(Array.wrap(list))
+              if preq.in?(Array.wrap(list)) && prerequisite_satisfied?(preq)
                 changes_made += 1
                 self << preq
               else
@@ -64,7 +67,7 @@ module Concerns
 
       return unless (Array.wrap(list) - keys).length.positive?
 
-      raise MissingSkillPrerequisite, "Unresolved skills #{unresolved_skills}"
+      raise UnresolvedSkillImport, "Unresolved skills #{unresolved_skills}"
     end
 
     def <<(other)
