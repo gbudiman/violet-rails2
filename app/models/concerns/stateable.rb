@@ -44,6 +44,7 @@ module Concerns
         end.reduce([]) { |a, b| a + b }.uniq.compact # rubocop:disable Style/MultilineBlockChain
 
         return unless invalids.present?
+
         raise Violet::Skills::InvalidSkillName, "Invalid prerequisites_map for #{klass}: #{invalids}"
       end
     end

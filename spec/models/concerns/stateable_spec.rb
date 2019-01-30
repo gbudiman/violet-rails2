@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 class StateTestable
-  SKILLS = %i[first_skill]
+  SKILLS = %i[first_skill].freeze
 
   include Concerns::Stateable
 end
@@ -19,7 +19,7 @@ RSpec.describe State, type: :model do
     it 'is raises error on invalid skill name' do
       expect do
         StateTestable.validate_skills!(
-          StateTestable, 
+          StateTestable,
           { first_skill: :second_skill },
           StateTestable::SKILLS
         )
