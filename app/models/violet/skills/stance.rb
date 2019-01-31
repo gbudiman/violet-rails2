@@ -46,6 +46,18 @@ module Violet
           stance_focus
         ]
       end
+      cattr_reader :active_stances do
+        %i[
+          stance_vigilance
+          stance_bulwark
+          stance_colossus
+          stance_aggression
+          stance_recovery
+          stance_phalanx
+          stance_mobility
+          stance_focus
+        ]
+      end
 
       prerequisites_map(
         bulwark: :vigilance,
@@ -69,6 +81,11 @@ module Violet
 
       def initialize(state)
         super
+      end
+
+      def stance_vigilance
+        active do
+        end
       end
     end
   end

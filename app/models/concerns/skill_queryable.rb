@@ -12,8 +12,16 @@ module Concerns
       end
     end
 
+    def available?(loc)
+      @state.skills.has?(loc.label.to_sym)
+    end
+
     def passive
-      yield if @state.skills.has?(caller_locations(1, 1)[0].label.to_sym)
+      yield if available?(caller_locations(1, 1)[0])
+    end
+
+    def active
+      yield if available?(caller_locations(1, 1)[0])
     end
   end
 end

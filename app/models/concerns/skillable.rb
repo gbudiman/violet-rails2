@@ -42,6 +42,7 @@ module Concerns
 
       loop do
         changes_made = 0
+        subchanges_made = false
 
         Array.wrap(list).each do |element|
           unresolved_skills.delete(element)
@@ -53,21 +54,23 @@ module Concerns
           else
             Concerns::Stateable.preqs[element].each do |preq|
               if preq.in?(Array.wrap(list)) && prerequisite_satisfied?(preq)
-                changes_made += 1
+                subchanges_made = true
                 self << preq
               else
                 unresolved_skills << preq
               end
             end
+
+            unresolved_skills << element
           end
         end
 
-        break if changes_made.zero? || (Array.wrap(list).length == changes_made)
+        break if (!subchanges_made && changes_made.zero?) || (Array.wrap(list).length == changes_made)
       end
 
       return unless (Array.wrap(list) - keys).length.positive?
 
-      raise UnresolvedSkillImport, "Unresolved skills #{unresolved_skills}"
+      raise UnresolvedSkillImport, "Unresolved skills #{unresolved_skills} while importing #{list}"
     end
 
     def <<(other)

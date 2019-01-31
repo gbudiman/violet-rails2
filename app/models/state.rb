@@ -8,11 +8,11 @@ class State
               :anatomies
 
   def initialize(hsh)
-    @stats = {}.extend(Concerns::Statable).import!(hsh[:stats])
-    @resources = {}.extend(Concerns::Resourceable).import!(hsh[:resources])
-    @skills = {}.extend(Concerns::Skillable).import!(hsh[:skills])
-    @effects = {}.extend(Concerns::Effectable).import!(hsh[:effects])
-    @anatomies = {}.extend(Concerns::Anatomiable).import!(hsh[:anatomies])
+    @stats = {}.extend(Concerns::Statable).import!(hsh[:stats] || {})
+    @resources = {}.extend(Concerns::Resourceable).import!(hsh[:resources] || {})
+    @skills = {}.extend(Concerns::Skillable).import!(hsh[:skills] || {})
+    @effects = {}.extend(Concerns::Effectable).import!(hsh[:effects] || {})
+    @anatomies = {}.extend(Concerns::Anatomiable).import!(hsh[:anatomies] || {})
   end
 
   def push_effect(**kwargs)
