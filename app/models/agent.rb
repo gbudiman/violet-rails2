@@ -10,8 +10,6 @@ class Agent < ApplicationRecord
 
   delegate :anatomies, to: :workable_state
   delegate :effects, to: :workable_state
-  delegate :equipments, to: :workable_state
-  delegate :inventories, to: :workable_state
   delegate :resources, to: :workable_state
   delegate :skills, to: :workable_state
   delegate :stats, to: :workable_state

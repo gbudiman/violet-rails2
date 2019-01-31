@@ -37,7 +37,7 @@ module Concerns
       end
     end
 
-    def smart_import!(list) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def smart_import!(list) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
       unresolved_skills = []
 
       loop do

@@ -85,6 +85,7 @@ module Violet
 
       def stance_vigilance
         active do
+          state.push_effect(stack: :permanent)
         end
       end
     end

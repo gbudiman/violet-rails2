@@ -82,18 +82,16 @@ RSpec.describe Violet::Skills::Stance do
   end
 
   context 'with state' do
-    subject(:instance) { State.new({})}
+    subject(:instance) { State.new({}) }
 
     describe 'stance_activation' do
       before do
         instance.effects.stance_vigilance = { stack: :permanent }
-        instance.skills.smart_import!(Violet::Skills::Stance::active_stances)
+        instance.skills.smart_import!(described_class.active_stances)
       end
 
-      Violet::Skills::Stance::active_stances.each do |stance|
+      described_class.active_stances.each do |stance|
         it "only activates effect of stance #{stance}" do
-          #ap instance.skills
-          instance.effects
         end
       end
     end
