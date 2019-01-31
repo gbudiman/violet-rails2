@@ -92,6 +92,7 @@ RSpec.describe Violet::Skills::Stance do
 
       described_class.active_stances.each do |stance|
         it "only activates effect of stance #{stance}" do
+          expect(instance.effects.stance_vigilance.stack).to eq(:permanent)
         end
       end
     end
