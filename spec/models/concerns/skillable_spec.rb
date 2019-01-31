@@ -56,4 +56,13 @@ RSpec.describe Concerns::Skillable, type: :model do
       expect(instance.has?(:limit_steel_lung, any_state: true)).to eq false
     end
   end
+
+  describe '#smart_import!' do
+    let(:list) { :limit_mechanics }
+
+    it 'raises error when unable to fully import given input' do
+      expect(instance).to receive(:keys).and_return([]) # rubocop:disable RSpec/SubjectStub
+      expect { instance.smart_import!(list) }.to raise_error(Concerns::Skillable::UnresolvedSkillImport)
+    end
+  end
 end
